@@ -3,792 +3,697 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>수업 참관록 시스템</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>수업 참관록</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --primary:#2563EB;--primary-dark:#1D4ED8;--primary-light:#EFF6FF;
-  --accent:#F59E0B;--accent-light:#FFFBEB;
-  --success:#10B981;--success-light:#ECFDF5;
-  --danger:#EF4444;
-  --gray1:#111827;--gray2:#374151;--gray3:#6B7280;--gray4:#9CA3AF;--gray5:#E5E7EB;--gray6:#F9FAFB;
-  --white:#FFFFFF;
-  --shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);
-  --shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05);
-  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  --navy:#0F2044;--navy2:#1A3A6B;--navy3:#2563EB;
+  --gold:#C9A84C;--gold2:#F0C96E;--gold-light:#FDF6E3;
+  --cream:#FAFAF7;--white:#FFFFFF;
+  --gray1:#1C1C1E;--gray2:#3A3A3C;--gray3:#636366;--gray4:#AEAEB2;--gray5:#E5E5EA;--gray6:#F2F2F7;
+  --success:#34C759;--danger:#FF3B30;
+  --shadow-sm:0 1px 4px rgba(0,0,0,0.07);
+  --shadow:0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,0.13);
+  --r:14px;--r-sm:8px;
 }
-body{font-family:'Noto Sans KR',sans-serif;background:var(--gray6);color:var(--gray1);min-height:100vh}
-
-/* ── 공통 ── */
+body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--gray1);min-height:100vh}
 .hidden{display:none!important}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit}
-.btn-primary{background:var(--primary);color:var(--white)}
-.btn-primary:hover{background:var(--primary-dark)}
-.btn-secondary{background:var(--white);color:var(--gray2);border:1px solid var(--gray5)}
-.btn-secondary:hover{background:var(--gray6)}
+.spinner{width:36px;height:36px;border:3px solid rgba(15,32,68,0.15);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.btn-navy{background:var(--navy);color:var(--white)}.btn-navy:hover{background:var(--navy2)}
+.btn-gold{background:var(--gold);color:var(--white)}.btn-gold:hover{background:var(--gold2);color:var(--gray1)}
+.btn-outline{background:var(--white);color:var(--gray2);border:1.5px solid var(--gray5)}.btn-outline:hover{background:var(--gray6)}
 .btn-danger{background:var(--danger);color:var(--white)}
-.btn-sm{padding:7px 12px;font-size:13px}
-.btn-lg{padding:14px 28px;font-size:16px}
-.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
-.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500}
-.badge-blue{background:var(--primary-light);color:var(--primary)}
-.badge-green{background:var(--success-light);color:var(--success)}
-.badge-yellow{background:var(--accent-light);color:#B45309}
+.btn-sm{padding:7px 14px;font-size:13px}.btn-xs{padding:5px 10px;font-size:12px}
+.btn-full{width:100%;justify-content:center}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.fg label{font-size:13px;font-weight:500;color:var(--gray2)}
+.req{color:var(--danger);margin-left:2px}
+.fi{width:100%;padding:10px 14px;border:1.5px solid var(--gray5);border-radius:var(--r-sm);font-size:14px;font-family:inherit;background:var(--white);color:var(--gray1);transition:border-color .2s}
+.fi:focus{outline:none;border-color:var(--navy3)}
+textarea.fi{resize:vertical;min-height:80px;line-height:1.6}
+.fi-hint{font-size:11px;color:var(--gray4);margin-top:3px}
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--gray1);color:var(--white);padding:13px 22px;border-radius:var(--r-sm);font-size:14px;z-index:9999;transition:transform .3s;box-shadow:var(--shadow);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}.toast.err{background:var(--danger)}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+@media print{.no-print{display:none!important}.app-header,.tab-nav,.url-box{display:none!important}}
 
 /* ── 로딩 ── */
-#loading-screen{position:fixed;inset:0;background:var(--white);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px}
-.spinner{width:40px;height:40px;border:3px solid var(--gray5);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+#screen-loading{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:9999}
+#screen-loading .logo{font-family:'Noto Serif KR',serif;font-size:28px;color:var(--white);letter-spacing:2px}
+#screen-loading .sub{font-size:13px;color:rgba(255,255,255,0.45)}
+#screen-loading .spinner{border-color:rgba(255,255,255,0.2);border-top-color:var(--gold2)}
 
 /* ── 로그인 ── */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#EFF6FF 0%,#DBEAFE 50%,#EFF6FF 100%)}
-.login-card{background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:48px 40px;width:100%;max-width:400px;text-align:center}
-.login-logo{font-size:48px;margin-bottom:16px}
-.login-title{font-size:26px;font-weight:700;color:var(--gray1);margin-bottom:6px}
-.login-sub{font-size:14px;color:var(--gray3);margin-bottom:36px}
-.login-divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:var(--gray4);font-size:13px}
-.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--gray5)}
-.google-btn{width:100%;padding:14px;border:1.5px solid var(--gray5);border-radius:var(--radius-sm);background:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit}
-.google-btn:hover{background:var(--gray6);border-color:var(--gray4)}
-.role-select{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.role-btn{padding:20px 12px;border:2px solid var(--gray5);border-radius:var(--radius);background:var(--white);cursor:pointer;transition:all .2s;text-align:center;font-family:inherit}
-.role-btn:hover,.role-btn.selected{border-color:var(--primary);background:var(--primary-light)}
-.role-btn .role-icon{font-size:28px;margin-bottom:8px}
-.role-btn .role-name{font-size:14px;font-weight:600;color:var(--gray1)}
-.role-btn .role-desc{font-size:12px;color:var(--gray3);margin-top:4px}
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);padding:20px}
+.login-box{background:var(--white);border-radius:20px;padding:48px 40px;width:100%;max-width:420px;text-align:center;box-shadow:var(--shadow-lg)}
+.login-emblem{width:72px;height:72px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px}
+.login-title{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--gray3);margin-bottom:32px}
+.google-btn{width:100%;padding:14px;border:1.5px solid var(--gray5);border-radius:var(--r-sm);background:var(--white);display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--gray1)}
+.google-btn:hover{background:var(--gray6)}
+.login-footer{margin-top:28px;font-size:12px;color:var(--gray4)}
 
-/* ── 앱 레이아웃 ── */
-#app-screen{min-height:100vh}
-.top-bar{background:var(--white);border-bottom:1px solid var(--gray5);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100}
-.top-bar-title{font-size:17px;font-weight:700;color:var(--gray1);display:flex;align-items:center;gap:8px}
-.top-bar-user{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--gray3)}
-.main-content{padding:24px;max-width:1000px;margin:0 auto}
-
-/* ── 탭 ── */
-.tabs{display:flex;gap:4px;background:var(--white);border-radius:var(--radius);padding:6px;box-shadow:var(--shadow);margin-bottom:24px}
-.tab-btn{flex:1;padding:10px;border:none;background:none;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:var(--gray3);cursor:pointer;transition:all .2s;font-family:inherit}
-.tab-btn.active{background:var(--primary);color:var(--white)}
-
-/* ── 지도안 목록 ── */
-.lesson-grid{display:grid;gap:16px}
-.lesson-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-left:4px solid var(--primary);transition:box-shadow .2s}
-.lesson-card:hover{box-shadow:var(--shadow-md)}
-.lesson-info h3{font-size:16px;font-weight:600;color:var(--gray1);margin-bottom:6px}
-.lesson-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.lesson-meta span{font-size:12px;color:var(--gray3);background:var(--gray6);padding:3px 8px;border-radius:4px}
-.lesson-actions{display:flex;gap:8px;flex-shrink:0}
-.qr-box{text-align:center;padding:16px;background:var(--gray6);border-radius:var(--radius-sm);margin-top:12px}
-
-/* ── 지도안 등록 폼 ── */
-.form-group{margin-bottom:16px}
-.form-label{display:block;font-size:13px;font-weight:500;color:var(--gray2);margin-bottom:6px}
-.form-input{width:100%;padding:10px 14px;border:1.5px solid var(--gray5);border-radius:var(--radius-sm);font-size:14px;font-family:inherit;transition:border-color .2s;background:var(--white)}
-.form-input:focus{outline:none;border-color:var(--primary)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-
-/* ── 참관록 ── */
-.obs-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:24px}
-.obs-header h2{font-size:20px;font-weight:700;margin-bottom:8px}
-.obs-header p{font-size:13px;opacity:.8}
-.obs-section{margin-bottom:20px}
-.obs-section-title{font-size:14px;font-weight:600;color:var(--gray2);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--gray5)}
-.obs-table{width:100%;border-collapse:collapse;font-size:13px}
-.obs-table th{background:var(--gray6);padding:8px 12px;text-align:left;font-weight:500;color:var(--gray2);border:1px solid var(--gray5)}
-.obs-table td{padding:8px 12px;border:1px solid var(--gray5);vertical-align:top}
-.obs-textarea{width:100%;padding:10px;border:1.5px solid var(--gray5);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;resize:vertical;min-height:80px}
-.obs-textarea:focus{outline:none;border-color:var(--primary)}
-.rating-group{display:flex;gap:8px;flex-wrap:wrap}
-.rating-btn{padding:6px 14px;border:1.5px solid var(--gray5);border-radius:999px;font-size:12px;cursor:pointer;background:var(--white);transition:all .2s;font-family:inherit}
-.rating-btn.selected{border-color:var(--primary);background:var(--primary);color:var(--white)}
-
-/* ── QR 모달 ── */
+/* ── 관리자 앱 ── */
+#screen-admin{min-height:100vh}
+.app-header{background:var(--navy);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.header-brand{display:flex;align-items:center;gap:10px}
+.header-logo{font-size:22px}
+.header-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:var(--white)}
+.header-badge{font-size:11px;background:var(--gold);color:var(--white);padding:2px 8px;border-radius:999px;font-weight:600}
+.header-right{display:flex;align-items:center;gap:10px}
+.header-user{font-size:13px;color:rgba(255,255,255,0.55)}
+.app-body{padding:24px 28px;max-width:1080px;margin:0 auto}
+.tab-nav{display:flex;gap:2px;background:var(--white);border-radius:var(--r);padding:5px;box-shadow:var(--shadow-sm);margin-bottom:22px}
+.tab-btn{flex:1;padding:10px 6px;border:none;background:none;border-radius:var(--r-sm);font-size:13px;font-weight:500;color:var(--gray3);cursor:pointer;transition:all .2s;font-family:inherit}
+.tab-btn.on{background:var(--navy);color:var(--white)}
+.sec-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.sec-head h2{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--navy)}
+.sec-head p{font-size:13px;color:var(--gray3);margin-top:3px}
+.url-box{background:var(--navy);border-radius:var(--r);padding:22px;margin-bottom:22px}
+.url-box h3{font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:14px}
+.url-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.url-label{font-size:11px;font-weight:700;background:var(--gold);color:var(--white);padding:3px 10px;border-radius:999px;flex-shrink:0}
+.url-label.parent{background:#B45309}
+.url-text{flex:1;background:rgba(255,255,255,0.1);border-radius:var(--r-sm);padding:9px 13px;font-size:12px;font-family:monospace;word-break:break-all;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);min-width:0}
+.copy-btn{background:rgba(255,255,255,0.15);border:none;color:var(--white);padding:8px 13px;border-radius:var(--r-sm);font-size:12px;cursor:pointer;font-family:inherit;transition:background .2s;flex-shrink:0}
+.copy-btn:hover{background:rgba(255,255,255,0.28)}
+.lesson-list{display:grid;gap:12px}
+.lesson-item{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:18px 22px;display:flex;align-items:center;gap:16px;border-left:4px solid var(--navy3);transition:box-shadow .2s}
+.lesson-item:hover{box-shadow:var(--shadow)}
+.lesson-badge{width:44px;height:44px;background:var(--gray6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.lesson-body{flex:1;min-width:0}
+.lesson-title{font-size:15px;font-weight:600;color:var(--gray1);margin-bottom:5px}
+.lesson-meta{display:flex;flex-wrap:wrap;gap:5px}
+.meta-tag{font-size:11px;color:var(--gray3);background:var(--gray6);padding:3px 8px;border-radius:999px}
+.meta-tag.blue{background:#EFF6FF;color:var(--navy3)}
+.lesson-acts{display:flex;gap:7px;flex-shrink:0}
+.obs-item{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.obs-name{font-size:15px;font-weight:600;color:var(--gray1)}
+.obs-meta{font-size:12px;color:var(--gray3);margin-top:3px}
+.type-chip{font-size:11px;padding:3px 9px;border-radius:999px;font-weight:600;display:inline-block}
+.type-chip.teacher{background:#EFF6FF;color:var(--navy3)}
+.type-chip.parent{background:var(--gold-light);color:#92400E}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.settings-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:22px}
+.settings-title{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:14px}
+.field-list{display:flex;flex-direction:column;gap:8px}
+.field-item{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--gray6);border-radius:var(--r-sm)}
+.field-item input{flex:1;border:none;background:none;font-size:13px;font-family:inherit;color:var(--gray1)}
+.field-item input:focus{outline:none}
+.field-item select{border:1px solid var(--gray5);border-radius:4px;padding:3px 6px;font-size:11px;font-family:inherit;background:var(--white)}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--gray5)}
+.empty{text-align:center;padding:52px 20px;color:var(--gray4)}
+.empty-icon{font-size:44px;margin-bottom:10px}
+.empty p{font-size:14px}
+.app-footer{text-align:center;padding:28px;font-size:12px;color:var(--gray4)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px}
-.modal{background:var(--white);border-radius:var(--radius-lg);padding:32px;max-width:420px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
-.modal h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.modal p{font-size:13px;color:var(--gray3);margin-bottom:20px}
-#qr-canvas{border-radius:var(--radius-sm)}
-.modal-actions{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.modal{background:var(--white);border-radius:20px;padding:32px;max-width:680px;width:100%;box-shadow:var(--shadow-lg);max-height:88vh;overflow-y:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.modal-head h3{font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--navy)}
+.modal-close{background:var(--gray6);border:none;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* ── 참관록 목록 ── */
-.obs-list-item{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-.obs-list-meta{font-size:12px;color:var(--gray3);margin-top:4px}
+/* ── 참관자 화면 ── */
+#screen-observer{min-height:100vh}
+.obs-page-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);padding:30px 22px 26px;text-align:center;color:var(--white)}
+.obs-page-header .school{font-size:13px;opacity:.55;margin-bottom:7px;letter-spacing:1px}
+.obs-page-header h1{font-family:'Noto Serif KR',serif;font-size:24px;font-weight:700;margin-bottom:8px}
+.obs-type-badge{display:inline-block;background:var(--gold);color:var(--white);font-size:12px;font-weight:700;padding:4px 14px;border-radius:999px;letter-spacing:.5px}
+.obs-type-badge.parent{background:#B45309}
+.obs-body{padding:20px;max-width:680px;margin:0 auto}
+.obs-lesson-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
+.obs-lesson-title{font-family:'Noto Serif KR',serif;font-size:17px;font-weight:700;color:var(--navy);margin-bottom:12px}
+.info-row{display:flex;gap:8px;margin-bottom:7px;font-size:13px}
+.info-label{font-weight:500;color:var(--gray3);flex-shrink:0;min-width:50px}
+.goal-box{background:var(--gray6);border-left:3px solid var(--navy3);padding:11px 14px;border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:13px;color:var(--gray2);margin-top:11px;line-height:1.6}
+.drive-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:9px 16px;background:var(--navy3);color:var(--white);border-radius:var(--r-sm);font-size:13px;font-weight:500;text-decoration:none;transition:background .2s}
+.drive-btn:hover{background:var(--navy2)}
+.obs-form-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:26px;margin-bottom:18px}
+.obs-form-section{font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid var(--navy)}
+.rating-row{display:flex;gap:7px;flex-wrap:wrap}
+.r-btn{padding:8px 15px;border:1.5px solid var(--gray5);border-radius:999px;font-size:13px;cursor:pointer;background:var(--white);transition:all .2s;font-family:inherit;color:var(--gray2)}
+.r-btn:hover{border-color:var(--navy3);color:var(--navy3)}
+.r-btn.on{border-color:var(--navy);background:var(--navy);color:var(--white)}
+.obs-footer{text-align:center;padding:20px;font-size:12px;color:var(--gray4)}
 
-/* ── 인쇄 ── */
-@media print{
-  body{background:white}
-  .top-bar,.tabs,.no-print{display:none!important}
-  .main-content{padding:0;max-width:100%}
-  .card{box-shadow:none;border:1px solid #ddd}
-}
+/* ── 완료 ── */
+#screen-done{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--cream)}
+.done-card{background:var(--white);border-radius:20px;padding:48px 36px;max-width:420px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
+.done-icon{font-size:68px;margin-bottom:18px}
+.done-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.done-sub{font-size:14px;color:var(--gray3);line-height:1.7}
 
-/* ── 반응형 ── */
-@media(max-width:600px){
-  .form-row,.form-row-3{grid-template-columns:1fr}
-  .lesson-card{flex-direction:column}
-  .main-content{padding:16px}
-  .login-card{padding:32px 24px}
-}
+/* ── 에러 ── */
+#screen-error{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.err-card{background:var(--white);border-radius:20px;padding:48px 32px;max-width:400px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
 
-/* ── 빈 상태 ── */
-.empty-state{text-align:center;padding:48px 24px;color:var(--gray3)}
-.empty-state .empty-icon{font-size:48px;margin-bottom:12px}
-.empty-state p{font-size:14px}
-
-/* ── 알림 ── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--gray1);color:var(--white);padding:12px 20px;border-radius:var(--radius-sm);font-size:14px;z-index:9999;transition:transform .3s;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ── 참관록 작성 전체 ── */
-#obs-write-screen{min-height:100vh;background:var(--gray6);padding:20px}
-.obs-write-container{max-width:720px;margin:0 auto}
-.obs-write-header{text-align:center;margin-bottom:24px}
-.obs-write-header h1{font-size:22px;font-weight:700;color:var(--gray1)}
-.obs-write-header p{font-size:13px;color:var(--gray3);margin-top:4px}
+/* ── 참관록 상세 모달 ── */
+.detail-header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--white);border-radius:var(--r);padding:20px;margin-bottom:18px}
+.detail-header h2{font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;margin-bottom:5px}
+.detail-header p{font-size:12px;opacity:.65}
+.detail-section{margin-bottom:16px}
+.detail-section-title{font-size:13px;font-weight:600;color:var(--navy);border-bottom:1.5px solid var(--navy);padding-bottom:6px;margin-bottom:10px}
+.detail-table{width:100%;border-collapse:collapse;font-size:13px}
+.detail-table th{background:var(--gray6);padding:8px 11px;text-align:left;font-weight:500;color:var(--gray2);border:1px solid var(--gray5);width:35%}
+.detail-table td{padding:8px 11px;border:1px solid var(--gray5);color:var(--gray1)}
+@media(max-width:600px){.settings-grid{grid-template-columns:1fr}.app-body{padding:16px 14px}.obs-body{padding:14px}}
 </style>
 </head>
 <body>
 
 <!-- 로딩 -->
-<div id="loading-screen">
+<div id="screen-loading">
+  <div class="logo" id="loading-name">수업 참관록</div>
   <div class="spinner"></div>
-  <p style="font-size:14px;color:#6B7280">잠시만요...</p>
+  <div class="sub">잠시만 기다려 주세요</div>
 </div>
 
-<!-- 로그인 -->
-<div id="login-screen" class="hidden">
-  <div class="login-card">
-    <div class="login-logo">📋</div>
-    <div class="login-title">수업 참관록</div>
-    <div class="login-sub">공개수업 참관록 관리 시스템</div>
-    <div id="login-step1">
-      <button class="google-btn" onclick="loginWithGoogle()">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.31z"/></svg>
-        Google 계정으로 로그인
-      </button>
+<!-- 에러 -->
+<div id="screen-error" class="hidden">
+  <div class="err-card">
+    <div style="font-size:52px;margin-bottom:14px">⚠️</div>
+    <h2 style="font-family:'Noto Serif KR',serif;font-size:19px;font-weight:700;color:var(--navy);margin-bottom:9px">접속 오류</h2>
+    <p style="font-size:14px;color:var(--gray3)" id="err-msg">올바른 주소로 접속해 주세요.</p>
+  </div>
+</div>
+
+<!-- 관리자 로그인 -->
+<div id="screen-login" class="hidden">
+  <div class="login-box">
+    <div class="login-emblem">📋</div>
+    <div class="login-title" id="login-title">수업 참관록</div>
+    <div class="login-sub">관리자 로그인</div>
+    <button class="google-btn" onclick="doLogin()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.31z"/></svg>
+      Google 계정으로 로그인
+    </button>
+    <div class="login-footer">© 김정환</div>
+  </div>
+</div>
+
+<!-- 관리자 앱 -->
+<div id="screen-admin" class="hidden">
+  <header class="app-header no-print">
+    <div class="header-brand">
+      <span class="header-logo">📋</span>
+      <span class="header-title" id="admin-title">수업 참관록</span>
+      <span class="header-badge">관리자</span>
     </div>
-    <div id="login-step2" class="hidden">
-      <p style="font-size:14px;color:#374151;margin-bottom:16px;font-weight:500">역할을 선택해 주세요</p>
-      <div class="role-select">
-        <button class="role-btn" onclick="selectRole('teacher')">
-          <div class="role-icon">👩‍🏫</div>
-          <div class="role-name">교사</div>
-          <div class="role-desc">지도안 등록·관리</div>
-        </button>
-        <button class="role-btn" onclick="selectRole('observer')">
-          <div class="role-icon">👤</div>
-          <div class="role-name">참관자</div>
-          <div class="role-desc">참관록 작성</div>
-        </button>
+    <div class="header-right">
+      <span class="header-user" id="user-name"></span>
+      <button class="btn btn-sm" style="background:rgba(255,255,255,0.1);color:white;border:none" onclick="doLogout()">로그아웃</button>
+    </div>
+  </header>
+  <div class="app-body">
+    <div class="url-box no-print">
+      <h3>🔗 참관자 접속 주소 — 이 주소를 교사/학부모에게 공유하세요</h3>
+      <div class="url-row">
+        <span class="url-label">교사용</span>
+        <div class="url-text" id="url-teacher"></div>
+        <button class="copy-btn" onclick="copyUrl('teacher')">복사</button>
+      </div>
+      <div class="url-row">
+        <span class="url-label parent">학부모용</span>
+        <div class="url-text" id="url-parent"></div>
+        <button class="copy-btn" onclick="copyUrl('parent')">복사</button>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- 메인 앱 (교사) -->
-<div id="app-screen" class="hidden">
-  <div class="top-bar">
-    <div class="top-bar-title">📋 수업 참관록</div>
-    <div class="top-bar-user">
-      <span id="user-name-display"></span>
-      <button class="btn btn-secondary btn-sm" onclick="logout()">로그아웃</button>
-    </div>
-  </div>
-  <div class="main-content">
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('lessons')">📚 지도안 관리</button>
-      <button class="tab-btn" onclick="switchTab('register')">➕ 지도안 등록</button>
-      <button class="tab-btn" onclick="switchTab('observations')">📝 참관록 목록</button>
+    <div class="tab-nav no-print">
+      <button class="tab-btn on" onclick="goTab('lessons')">📚 지도안</button>
+      <button class="tab-btn" onclick="goTab('register')">➕ 등록</button>
+      <button class="tab-btn" onclick="goTab('observations')">📝 참관록</button>
+      <button class="tab-btn" onclick="goTab('settings')">⚙️ 설정</button>
     </div>
 
-    <!-- 지도안 목록 탭 -->
+    <!-- 지도안 목록 -->
     <div id="tab-lessons">
-      <div class="card" style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <h2 style="font-size:18px;font-weight:700">등록된 지도안</h2>
-            <p style="font-size:13px;color:#6B7280;margin-top:4px">QR코드로 학부모와 공유하세요</p>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="loadLessons()">🔄 새로고침</button>
-        </div>
+      <div class="sec-head">
+        <div><h2>등록된 지도안</h2><p>지도안을 등록하고 참관자 주소를 공유하세요</p></div>
+        <button class="btn btn-outline btn-sm no-print" onclick="loadLessons()">🔄 새로고침</button>
       </div>
-      <div id="lessons-list">
-        <div class="empty-state"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다</p></div>
-      </div>
+      <div id="lessons-list"></div>
     </div>
 
-    <!-- 지도안 등록 탭 -->
+    <!-- 지도안 등록 -->
     <div id="tab-register" class="hidden">
       <div class="card">
-        <h2 style="font-size:18px;font-weight:700;margin-bottom:20px">지도안 등록</h2>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">담당 교사 *</label>
-            <input class="form-input" id="f-teacher" placeholder="예: 김도덕">
-          </div>
-          <div class="form-group">
-            <label class="form-label">교과 *</label>
-            <input class="form-input" id="f-subject" placeholder="예: 도덕">
-          </div>
+        <div class="sec-head"><div><h2>지도안 등록</h2></div></div>
+        <div class="grid2">
+          <div class="fg"><label>담당 교사<span class="req">*</span></label><input class="fi" id="f-teacher" placeholder="예: 김도덕"></div>
+          <div class="fg"><label>교과<span class="req">*</span></label><input class="fi" id="f-subject" placeholder="예: 도덕"></div>
         </div>
-        <div class="form-row-3">
-          <div class="form-group">
-            <label class="form-label">학년 *</label>
-            <select class="form-input" id="f-grade">
-              <option value="">선택</option>
-              <option>1학년</option><option>2학년</option><option>3학년</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">반 *</label>
-            <select class="form-input" id="f-class">
-              <option value="">선택</option>
-              <option>1반</option><option>2반</option><option>3반</option>
-              <option>4반</option><option>5반</option><option>6반</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">수업 교시 *</label>
-            <select class="form-input" id="f-period">
-              <option value="">선택</option>
-              <option>1교시</option><option>2교시</option><option>3교시</option>
-              <option>4교시</option><option>5교시</option><option>6교시</option><option>7교시</option>
-            </select>
-          </div>
+        <div class="grid3">
+          <div class="fg"><label>학년<span class="req">*</span></label>
+            <select class="fi" id="f-grade"><option value="">선택</option><option>1학년</option><option>2학년</option><option>3학년</option></select></div>
+          <div class="fg"><label>반<span class="req">*</span></label>
+            <select class="fi" id="f-class"><option value="">선택</option><option>1반</option><option>2반</option><option>3반</option><option>4반</option><option>5반</option><option>6반</option><option>7반</option><option>8반</option><option>9반</option></select></div>
+          <div class="fg"><label>교시<span class="req">*</span></label>
+            <select class="fi" id="f-period"><option value="">선택</option><option>1교시</option><option>2교시</option><option>3교시</option><option>4교시</option><option>5교시</option><option>6교시</option><option>7교시</option></select></div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">단원명 *</label>
-            <input class="form-input" id="f-unit" placeholder="예: Ⅱ-1. 타인과의 관계">
-          </div>
-          <div class="form-group">
-            <label class="form-label">수업일 *</label>
-            <input class="form-input" id="f-date" type="date">
-          </div>
+        <div class="grid2">
+          <div class="fg"><label>단원명<span class="req">*</span></label><input class="fi" id="f-unit" placeholder="예: Ⅱ-1. 타인과의 관계"></div>
+          <div class="fg"><label>수업일<span class="req">*</span></label><input class="fi" id="f-date" type="date"></div>
         </div>
-        <div class="form-group">
-          <label class="form-label">수업 목표 *</label>
-          <textarea class="form-input" id="f-goal" rows="3" placeholder="이 수업을 통해 학생들이 달성해야 할 목표를 입력하세요"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">수업 내용 요약</label>
-          <textarea class="form-input" id="f-summary" rows="4" placeholder="수업의 주요 활동과 흐름을 간략히 설명해 주세요"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">수업 장소</label>
-          <input class="form-input" id="f-room" placeholder="예: 3학년 1반 교실">
-        </div>
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-          <button class="btn btn-secondary" onclick="clearForm()">초기화</button>
-          <button class="btn btn-primary" onclick="saveLesson()">💾 저장 및 QR 생성</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 참관록 목록 탭 -->
-    <div id="tab-observations" class="hidden">
-      <div class="card" style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="fg"><label>수업 목표<span class="req">*</span></label><textarea class="fi" id="f-goal" rows="2" placeholder="이 수업의 학습 목표를 입력하세요"></textarea></div>
+        <div class="grid2">
+          <div class="fg"><label>수업 내용 요약</label><textarea class="fi" id="f-summary" rows="3" placeholder="수업의 주요 활동과 흐름"></textarea></div>
           <div>
-            <h2 style="font-size:18px;font-weight:700">참관록 목록</h2>
-            <p style="font-size:13px;color:#6B7280;margin-top:4px">제출된 참관록을 확인하세요</p>
+            <div class="fg"><label>수업 장소</label><input class="fi" id="f-room" placeholder="예: 3학년 1반 교실"></div>
+            <div class="fg">
+              <label>지도안 파일 링크<span style="font-size:11px;color:var(--gray4);margin-left:4px">(Google Drive 공유 링크)</span></label>
+              <input class="fi" id="f-drive" placeholder="https://drive.google.com/...">
+              <div class="fi-hint">Drive → 파일 우클릭 → 공유 → 링크가 있는 모든 사용자 → 링크 복사</div>
+            </div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="loadObservations()">🔄 새로고침</button>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-outline" onclick="clearForm()">초기화</button>
+          <button class="btn btn-navy" onclick="saveLesson()">💾 저장</button>
         </div>
       </div>
-      <div id="observations-list">
-        <div class="empty-state"><div class="empty-icon">📭</div><p>제출된 참관록이 없습니다</p></div>
+    </div>
+
+    <!-- 참관록 목록 -->
+    <div id="tab-observations" class="hidden">
+      <div class="sec-head">
+        <div><h2>제출된 참관록</h2></div>
+        <button class="btn btn-outline btn-sm no-print" onclick="loadObs()">🔄 새로고침</button>
+      </div>
+      <div id="obs-list"></div>
+    </div>
+
+    <!-- 설정 -->
+    <div id="tab-settings" class="hidden">
+      <div class="sec-head"><div><h2>시스템 설정</h2></div></div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <div class="settings-title">🏫 프로그램/학교 이름</div>
+          <div class="fg"><label>이름</label><input class="fi" id="s-name" placeholder="예: ○○중학교 공개수업 참관록"></div>
+          <button class="btn btn-navy btn-sm" onclick="saveAppName()">저장</button>
+        </div>
+        <div class="settings-card">
+          <div class="settings-title">👩‍🏫 교사용 참관록 항목</div>
+          <div class="field-list" id="fields-teacher"></div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="addField('teacher')">+ 추가</button>
+            <button class="btn btn-navy btn-sm" onclick="saveFields('teacher')">저장</button>
+          </div>
+        </div>
+        <div class="settings-card" style="grid-column:1/-1">
+          <div class="settings-title">👨‍👩‍👧 학부모용 참관록 항목</div>
+          <div class="field-list" id="fields-parent"></div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm" onclick="addField('parent')">+ 추가</button>
+            <button class="btn btn-navy btn-sm" onclick="saveFields('parent')">저장</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  <div class="app-footer">© 김정환 | 수업 참관록 시스템</div>
 </div>
 
-<!-- 참관록 작성 화면 (QR 접속) -->
-<div id="obs-write-screen" class="hidden">
-  <div class="obs-write-container">
-    <div class="obs-write-header">
-      <h1>📋 수업 참관록</h1>
-      <p>공개수업 참관록 작성</p>
+<!-- 참관자 화면 -->
+<div id="screen-observer" class="hidden">
+  <div class="obs-page-header">
+    <div class="school" id="obs-school-name">수업 참관록</div>
+    <h1>공개수업 참관록</h1>
+    <div class="obs-type-badge" id="obs-type-badge">교사용</div>
+  </div>
+  <div class="obs-body">
+    <div id="obs-step-select" class="obs-lesson-card">
+      <div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:14px">수업 선택</div>
+      <div class="fg"><label>참관하실 수업을 선택해 주세요<span class="req">*</span></label>
+        <select class="fi" id="obs-lesson-sel"><option value="">— 수업 선택 —</option></select>
+      </div>
+      <button class="btn btn-navy btn-full" onclick="selectLesson()">선택</button>
     </div>
-    <div class="card" id="obs-lesson-info" style="margin-bottom:16px"></div>
-    <div class="card">
-      <div class="obs-section">
-        <div class="obs-section-title">참관자 정보</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">성명 *</label>
-            <input class="form-input" id="obs-name" placeholder="이름을 입력하세요">
-          </div>
-          <div class="form-group">
-            <label class="form-label">관계 *</label>
-            <select class="form-input" id="obs-relation">
-              <option value="">선택</option>
-              <option>학부모</option><option>교사</option><option>교육청 관계자</option><option>기타</option>
-            </select>
-          </div>
+    <div id="obs-step-form" class="hidden">
+      <div class="obs-lesson-card">
+        <div class="obs-lesson-title" id="ol-title"></div>
+        <div class="info-row"><span class="info-label">교사</span><span id="ol-teacher"></span></div>
+        <div class="info-row"><span class="info-label">일시</span><span id="ol-datetime"></span></div>
+        <div class="info-row"><span class="info-label">장소</span><span id="ol-room"></span></div>
+        <div class="info-row"><span class="info-label">단원</span><span id="ol-unit"></span></div>
+        <div class="goal-box" id="ol-goal"></div>
+        <div id="ol-drive"></div>
+      </div>
+      <div class="obs-form-card">
+        <div class="obs-form-section">참관자 정보</div>
+        <div class="grid2">
+          <div class="fg"><label>성명<span class="req">*</span></label><input class="fi" id="obs-name" placeholder="이름"></div>
+          <div class="fg"><label id="obs-pos-label">소속 및 직위<span class="req">*</span></label><input class="fi" id="obs-pos" placeholder="예: 1학년 담임"></div>
         </div>
       </div>
-
-      <div class="obs-section">
-        <div class="obs-section-title">수업 평가</div>
-        <table class="obs-table">
-          <tr>
-            <th style="width:40%">평가 항목</th>
-            <th>평가</th>
-          </tr>
-          <tr>
-            <td>수업 목표 달성도</td>
-            <td>
-              <div class="rating-group" id="r1">
-                <button class="rating-btn" onclick="setRating('r1',this,'매우 우수')">매우 우수</button>
-                <button class="rating-btn" onclick="setRating('r1',this,'우수')">우수</button>
-                <button class="rating-btn" onclick="setRating('r1',this,'보통')">보통</button>
-                <button class="rating-btn" onclick="setRating('r1',this,'미흡')">미흡</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>학생 참여도</td>
-            <td>
-              <div class="rating-group" id="r2">
-                <button class="rating-btn" onclick="setRating('r2',this,'매우 우수')">매우 우수</button>
-                <button class="rating-btn" onclick="setRating('r2',this,'우수')">우수</button>
-                <button class="rating-btn" onclick="setRating('r2',this,'보통')">보통</button>
-                <button class="rating-btn" onclick="setRating('r2',this,'미흡')">미흡</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>교사의 수업 전문성</td>
-            <td>
-              <div class="rating-group" id="r3">
-                <button class="rating-btn" onclick="setRating('r3',this,'매우 우수')">매우 우수</button>
-                <button class="rating-btn" onclick="setRating('r3',this,'우수')">우수</button>
-                <button class="rating-btn" onclick="setRating('r3',this,'보통')">보통</button>
-                <button class="rating-btn" onclick="setRating('r3',this,'미흡')">미흡</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>교육 자료 및 환경</td>
-            <td>
-              <div class="rating-group" id="r4">
-                <button class="rating-btn" onclick="setRating('r4',this,'매우 우수')">매우 우수</button>
-                <button class="rating-btn" onclick="setRating('r4',this,'우수')">우수</button>
-                <button class="rating-btn" onclick="setRating('r4',this,'보통')">보통</button>
-                <button class="rating-btn" onclick="setRating('r4',this,'미흡')">미흡</button>
-              </div>
-            </td>
-          </tr>
-        </table>
+      <div class="obs-form-card" id="obs-fields-wrap">
+        <div class="obs-form-section">참관 내용</div>
       </div>
-
-      <div class="obs-section">
-        <div class="obs-section-title">참관 소감 및 의견</div>
-        <div class="form-group">
-          <label class="form-label">잘된 점</label>
-          <textarea class="obs-textarea" id="obs-good" placeholder="수업에서 좋았던 점을 작성해 주세요"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">제언 사항</label>
-          <textarea class="obs-textarea" id="obs-suggest" placeholder="개선 또는 제안하고 싶은 점을 작성해 주세요"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">종합 의견</label>
-          <textarea class="obs-textarea" id="obs-total" placeholder="수업 전반에 대한 종합적인 의견을 작성해 주세요"></textarea>
-        </div>
-      </div>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end">
-        <button class="btn btn-secondary no-print" onclick="printObs()">🖨️ 인쇄</button>
-        <button class="btn btn-primary no-print" onclick="submitObs()">✅ 제출</button>
+      <div class="no-print" style="display:flex;gap:10px;margin-bottom:24px">
+        <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="window.print()">🖨️ 인쇄</button>
+        <button class="btn btn-navy" style="flex:2;justify-content:center" onclick="submitObs()">✅ 참관록 제출</button>
       </div>
     </div>
   </div>
+  <div class="obs-footer">© 김정환 | 수업 참관록 시스템</div>
 </div>
 
-<!-- QR 모달 -->
-<div id="qr-modal" class="modal-overlay hidden">
-  <div class="modal">
-    <h3>📱 QR 코드</h3>
-    <p id="qr-lesson-title"></p>
-    <canvas id="qr-canvas" width="200" height="200"></canvas>
-    <div style="margin-top:12px;font-size:12px;color:#6B7280" id="qr-url-display"></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="downloadQR()">💾 저장</button>
-      <button class="btn btn-primary" onclick="closeQRModal()">닫기</button>
-    </div>
+<!-- 완료 -->
+<div id="screen-done" class="hidden">
+  <div class="done-card">
+    <div class="done-icon">✅</div>
+    <div class="done-title">제출 완료</div>
+    <div class="done-sub">참관록이 성공적으로 제출되었습니다.<br>참여해 주셔서 감사합니다.</div>
+    <button class="btn btn-outline" style="margin-top:22px;width:100%;justify-content:center" onclick="window.print()">🖨️ 인쇄</button>
   </div>
 </div>
 
 <!-- 참관록 상세 모달 -->
-<div id="obs-detail-modal" class="modal-overlay hidden">
-  <div class="modal" style="max-width:600px;text-align:left;max-height:80vh;overflow-y:auto">
-    <h3 style="margin-bottom:16px">📝 참관록 상세</h3>
-    <div id="obs-detail-content"></div>
-    <div class="modal-actions" style="justify-content:flex-end">
-      <button class="btn btn-secondary no-print" onclick="printObsDetail()">🖨️ 인쇄</button>
-      <button class="btn btn-primary" onclick="closeObsDetail()">닫기</button>
+<div id="obs-modal" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>📝 참관록 상세</h3>
+      <button class="modal-close" onclick="document.getElementById('obs-modal').classList.add('hidden')">✕</button>
+    </div>
+    <div id="obs-modal-body"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px" class="no-print">
+      <button class="btn btn-outline" onclick="window.print()">🖨️ 인쇄</button>
+      <button class="btn btn-navy" onclick="document.getElementById('obs-modal').classList.add('hidden')">닫기</button>
     </div>
   </div>
 </div>
 
-<!-- 토스트 -->
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, getDocs, deleteDoc, collection, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCmb2LEfnANi-I7JAZcOeeb7RgSM4uHzBs",
-  authDomain: "cham-new-b5bf4.firebaseapp.com",
-  projectId: "cham-new-b5bf4",
-  storageBucket: "cham-new-b5bf4.firebasestorage.app",
-  messagingSenderId: "886029551342",
-  appId: "1:886029551342:web:fd789e07fc905b008f55ff"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const FB = {apiKey:"AIzaSyCmb2LEfnANi-I7JAZcOeeb7RgSM4uHzBs",authDomain:"cham-new-b5bf4.firebaseapp.com",projectId:"cham-new-b5bf4",storageBucket:"cham-new-b5bf4.firebasestorage.app",messagingSenderId:"886029551342",appId:"1:886029551342:web:fd789e07fc905b008f55ff"};
+const fbApp = initializeApp(FB);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
 const provider = new GoogleAuthProvider();
 
-let currentUser = null;
-let currentRole = null;
-let ratings = {};
-let currentLessonId = null;
+// URL 파라미터
+const P = new URLSearchParams(location.search);
+const ROLE = P.get('role'); // 없으면 관리자(로그인 필요), 'teacher' 또는 'parent' 이면 참관자
+const OBS_TYPE = P.get('type'); // teacher | parent
+const OWNER_UID = P.get('uid') || '';
 
-// ── URL 파라미터 확인 ──
-const urlParams = new URLSearchParams(window.location.search);
-const obsLessonId = urlParams.get('lesson');
+const DEFAULT_T_FIELDS = [
+  {label:'수업 목표 달성도',type:'rating'},{label:'학생 참여도',type:'rating'},
+  {label:'교사의 수업 전문성',type:'rating'},{label:'교육 자료 활용',type:'rating'},
+  {label:'잘된 점',type:'textarea'},{label:'내 수업에 활용하고 싶은 점',type:'textarea'},{label:'종합 의견',type:'textarea'}
+];
+const DEFAULT_P_FIELDS = [
+  {label:'수업 분위기',type:'rating'},{label:'교사의 열정',type:'rating'},{label:'자녀의 참여도',type:'rating'},
+  {label:'수업에서 좋았던 점',type:'textarea'},{label:'건의 사항',type:'textarea'},{label:'종합 소감',type:'textarea'}
+];
 
-// ── 인증 상태 감지 ──
-onAuthStateChanged(auth, async (user) => {
-  document.getElementById('loading-screen').classList.add('hidden');
-  if (obsLessonId) {
-    // QR로 접속한 경우 → 참관록 작성 화면
-    showObsWrite(obsLessonId);
+let ME=null, MY_UID='', CONFIG={}, LESSONS=[], SEL_LESSON=null, OBS_ANS={};
+
+// ── 진입 분기 ──
+onAuthStateChanged(auth, async u => {
+  // 참관자 접속 (type 파라미터 있음)
+  if (OBS_TYPE && OWNER_UID) {
+    document.getElementById('screen-loading').classList.add('hidden');
+    await initObserver();
     return;
   }
-  if (user) {
-    currentUser = user;
-    const uid = user.email.replace(/[.@]/g,'_');
-    const roleDoc = await getDoc(doc(db,'userRoles', uid));
-    if (roleDoc.exists()) {
-      currentRole = roleDoc.data().role;
-      showApp();
-    } else {
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('login-step1').classList.add('hidden');
-      document.getElementById('login-step2').classList.remove('hidden');
-    }
-  } else {
-    document.getElementById('login-screen').classList.remove('hidden');
-  }
+  // 관리자
+  document.getElementById('screen-loading').classList.add('hidden');
+  if (u) { ME=u; MY_UID=u.email.replace(/[.@]/g,'_'); await initAdmin(); }
+  else { document.getElementById('screen-login').classList.remove('hidden'); }
 });
 
-// ── 로그인 ──
-window.loginWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch(e) { showToast('로그인 실패: '+e.message, true); }
-};
+// ══════════════════════════════════════
+// 관리자
+// ══════════════════════════════════════
+window.doLogin = async () => { try { await signInWithPopup(auth,provider); } catch(e){ toast('로그인 실패',true); }};
+window.doLogout = async () => { await signOut(auth); location.reload(); };
 
-window.selectRole = async (role) => {
-  currentRole = role;
-  const uid = currentUser.email.replace(/[.@]/g,'_');
-  await setDoc(doc(db,'userRoles', uid), { role, email: currentUser.email, name: currentUser.displayName });
-  showApp();
-};
+async function initAdmin() {
+  const snap = await getDoc(doc(db,'config',MY_UID));
+  CONFIG = snap.exists() ? snap.data() : {};
+  if (!CONFIG.appName) CONFIG.appName='수업 참관록';
+  if (!CONFIG.teacherFields) CONFIG.teacherFields=DEFAULT_T_FIELDS;
+  if (!CONFIG.parentFields) CONFIG.parentFields=DEFAULT_P_FIELDS;
 
-window.logout = async () => {
-  await signOut(auth);
-  currentUser = null; currentRole = null;
-  document.getElementById('app-screen').classList.add('hidden');
-  document.getElementById('login-screen').classList.remove('hidden');
-  document.getElementById('login-step1').classList.remove('hidden');
-  document.getElementById('login-step2').classList.add('hidden');
-};
+  const name = CONFIG.appName;
+  document.getElementById('admin-title').textContent = name;
+  document.getElementById('login-title').textContent = name;
+  document.getElementById('loading-name').textContent = name;
+  document.getElementById('user-name').textContent = ME.displayName||ME.email;
+  document.getElementById('s-name').value = name;
 
-// ── 앱 표시 ──
-function showApp() {
-  document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('app-screen').classList.remove('hidden');
-  document.getElementById('user-name-display').textContent = currentUser.displayName || currentUser.email;
+  const base = location.origin+location.pathname;
+  document.getElementById('url-teacher').textContent = `${base}?type=teacher&uid=${MY_UID}`;
+  document.getElementById('url-parent').textContent = `${base}?type=parent&uid=${MY_UID}`;
+
+  renderFieldSettings('teacher',CONFIG.teacherFields);
+  renderFieldSettings('parent',CONFIG.parentFields);
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('screen-admin').classList.remove('hidden');
   loadLessons();
 }
 
-// ── 탭 전환 ──
-window.switchTab = (tab) => {
-  ['lessons','register','observations'].forEach(t => {
-    document.getElementById('tab-'+t).classList.toggle('hidden', t!==tab);
-  });
-  document.querySelectorAll('.tab-btn').forEach((btn,i) => {
-    btn.classList.toggle('active', ['lessons','register','observations'][i]===tab);
-  });
-  if (tab==='observations') loadObservations();
+window.copyUrl = (type) => {
+  const el = document.getElementById('url-'+type);
+  navigator.clipboard.writeText(el.textContent);
+  toast('주소가 복사되었습니다');
 };
 
-// ── 지도안 저장 ──
+window.goTab = (t) => {
+  ['lessons','register','observations','settings'].forEach(x=>{
+    document.getElementById('tab-'+x).classList.toggle('hidden',x!==t);
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('on',['lessons','register','observations','settings'][i]===t);
+  });
+  if(t==='observations') loadObs();
+};
+
 window.saveLesson = async () => {
-  const fields = {
-    teacher: document.getElementById('f-teacher').value.trim(),
-    subject: document.getElementById('f-subject').value.trim(),
-    grade: document.getElementById('f-grade').value,
-    cls: document.getElementById('f-class').value,
-    period: document.getElementById('f-period').value,
-    unit: document.getElementById('f-unit').value.trim(),
-    date: document.getElementById('f-date').value,
-    goal: document.getElementById('f-goal').value.trim(),
-    summary: document.getElementById('f-summary').value.trim(),
-    room: document.getElementById('f-room').value.trim(),
+  const d = {
+    teacher:document.getElementById('f-teacher').value.trim(),
+    subject:document.getElementById('f-subject').value.trim(),
+    grade:document.getElementById('f-grade').value,
+    cls:document.getElementById('f-class').value,
+    period:document.getElementById('f-period').value,
+    unit:document.getElementById('f-unit').value.trim(),
+    date:document.getElementById('f-date').value,
+    goal:document.getElementById('f-goal').value.trim(),
+    summary:document.getElementById('f-summary').value.trim(),
+    room:document.getElementById('f-room').value.trim(),
+    driveUrl:document.getElementById('f-drive').value.trim(),
+    ownerUid:MY_UID, createdAt:serverTimestamp()
   };
-  if (!fields.teacher||!fields.subject||!fields.grade||!fields.cls||!fields.period||!fields.unit||!fields.date||!fields.goal) {
-    showToast('* 표시된 필수 항목을 입력해 주세요', true); return;
-  }
-  try {
-    const uid = currentUser.email.replace(/[.@]/g,'_');
-    const ref = await addDoc(collection(db,'lessons'), {
-      ...fields, ownerUid: uid, ownerEmail: currentUser.email,
-      createdAt: serverTimestamp()
-    });
-    showToast('저장 완료!');
-    clearForm();
-    switchTab('lessons');
-    setTimeout(() => showQR(ref.id, `${fields.grade} ${fields.cls} ${fields.subject}`), 500);
-  } catch(e) { showToast('저장 실패: '+e.message, true); }
+  if(!d.teacher||!d.subject||!d.grade||!d.cls||!d.period||!d.unit||!d.date||!d.goal){toast('* 필수 항목을 입력해 주세요',true);return;}
+  await addDoc(collection(db,'lessons'),d);
+  toast('저장되었습니다');
+  clearForm(); goTab('lessons'); loadLessons();
 };
 
 window.clearForm = () => {
-  ['f-teacher','f-subject','f-grade','f-class','f-period','f-unit','f-date','f-goal','f-summary','f-room']
-    .forEach(id => document.getElementById(id).value='');
+  ['f-teacher','f-subject','f-grade','f-class','f-period','f-unit','f-goal','f-summary','f-room','f-drive'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
 };
 
-// ── 지도안 목록 로드 ──
 window.loadLessons = async () => {
-  const container = document.getElementById('lessons-list');
-  container.innerHTML = '<div style="text-align:center;padding:20px;color:#6B7280">불러오는 중...</div>';
-  try {
-    const uid = currentUser.email.replace(/[.@]/g,'_');
-    const q = query(collection(db,'lessons'), where('ownerUid','==',uid));
-    const snap = await getDocs(q);
-    if (snap.empty) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다</p></div>';
-      return;
-    }
-    const lessons = [];
-    snap.forEach(d => lessons.push({id:d.id,...d.data()}));
-    lessons.sort((a,b) => (b.date||'').localeCompare(a.date||''));
-    container.innerHTML = lessons.map(l => `
-      <div class="lesson-card">
-        <div class="lesson-info">
-          <h3>${l.grade} ${l.cls} ${l.subject} — ${l.unit}</h3>
-          <div class="lesson-meta">
-            <span>👩‍🏫 ${l.teacher}</span>
-            <span>📅 ${l.date}</span>
-            <span>🕐 ${l.period}</span>
-            ${l.room?`<span>📍 ${l.room}</span>`:''}
-          </div>
-          <div style="font-size:13px;color:#374151">${l.goal}</div>
-        </div>
-        <div class="lesson-actions">
-          <button class="btn btn-primary btn-sm" onclick="showQR('${l.id}','${l.grade} ${l.cls} ${l.subject}')">📱 QR</button>
-          <button class="btn btn-secondary btn-sm" onclick="deleteLesson('${l.id}')">🗑️</button>
+  const c=document.getElementById('lessons-list');
+  c.innerHTML='<div style="text-align:center;padding:28px;color:var(--gray4)">불러오는 중...</div>';
+  const q=query(collection(db,'lessons'),where('ownerUid','==',MY_UID));
+  const snap=await getDocs(q);
+  if(snap.empty){c.innerHTML='<div class="empty"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다<br>등록 탭에서 추가해 주세요</p></div>';return;}
+  const items=[];snap.forEach(d=>items.push({id:d.id,...d.data()}));
+  items.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  c.innerHTML='<div class="lesson-list">'+items.map(l=>`
+    <div class="lesson-item">
+      <div class="lesson-badge">📄</div>
+      <div class="lesson-body">
+        <div class="lesson-title">${l.grade} ${l.cls} ${l.subject} — ${l.unit}</div>
+        <div class="lesson-meta">
+          <span class="meta-tag">👩‍🏫 ${l.teacher}</span>
+          <span class="meta-tag">📅 ${l.date}</span>
+          <span class="meta-tag">🕐 ${l.period}</span>
+          ${l.room?`<span class="meta-tag">📍 ${l.room}</span>`:''}
+          ${l.driveUrl?`<span class="meta-tag blue">📎 파일 있음</span>`:''}
         </div>
       </div>
-    `).join('');
-  } catch(e) { showToast('불러오기 실패: '+e.message, true); }
-};
-
-// ── 지도안 삭제 ──
-window.deleteLesson = async (id) => {
-  if (!confirm('이 지도안을 삭제하시겠습니까?')) return;
-  const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-  await deleteDoc(doc(db,'lessons',id));
-  showToast('삭제되었습니다');
-  loadLessons();
-};
-
-// ── QR 생성 ──
-window.showQR = (lessonId, title) => {
-  const url = `${location.origin}${location.pathname}?lesson=${lessonId}`;
-  document.getElementById('qr-lesson-title').textContent = title;
-  document.getElementById('qr-url-display').textContent = url;
-  document.getElementById('qr-modal').classList.remove('hidden');
-  generateQR(url);
-};
-
-window.closeQRModal = () => document.getElementById('qr-modal').classList.add('hidden');
-
-window.downloadQR = () => {
-  const canvas = document.getElementById('qr-canvas');
-  const a = document.createElement('a');
-  a.download = 'QR_참관록.png';
-  a.href = canvas.toDataURL();
-  a.click();
-};
-
-// ── QR 코드 그리기 (라이브러리 없이 직접 구현은 복잡하므로 API 사용) ──
-function generateQR(url) {
-  const canvas = document.getElementById('qr-canvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => { ctx.clearRect(0,0,200,200); ctx.drawImage(img,0,0,200,200); };
-  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
-}
-
-// ── 참관록 작성 화면 (QR 접속) ──
-async function showObsWrite(lessonId) {
-  document.getElementById('obs-write-screen').classList.remove('hidden');
-  currentLessonId = lessonId;
-  try {
-    const snap = await getDoc(doc(db,'lessons',lessonId));
-    if (!snap.exists()) {
-      document.getElementById('obs-lesson-info').innerHTML = '<p style="color:#EF4444">지도안을 찾을 수 없습니다.</p>';
-      return;
-    }
-    const l = snap.data();
-    document.getElementById('obs-lesson-info').innerHTML = `
-      <div class="obs-header">
-        <h2>${l.grade} ${l.cls} ${l.subject}</h2>
-        <p>${l.date} ${l.period} | ${l.teacher} 선생님${l.room?' | '+l.room:''}</p>
+      <div class="lesson-acts no-print">
+        ${l.driveUrl?`<a href="${l.driveUrl}" target="_blank" class="btn btn-outline btn-xs">📄 열기</a>`:''}
+        <button class="btn btn-danger btn-xs" onclick="delLesson('${l.id}')">삭제</button>
       </div>
-      <div style="font-size:14px;color:#374151"><strong>단원:</strong> ${l.unit}</div>
-      <div style="font-size:14px;color:#374151;margin-top:8px"><strong>수업 목표:</strong> ${l.goal}</div>
-      ${l.summary?`<div style="font-size:14px;color:#374151;margin-top:8px"><strong>수업 내용:</strong> ${l.summary}</div>`:''}
-    `;
-  } catch(e) {
-    document.getElementById('obs-lesson-info').innerHTML = '<p style="color:#EF4444">지도안 로드 실패</p>';
-  }
+    </div>`).join('')+'</div>';
+};
+
+window.delLesson = async (id) => {
+  if(!confirm('삭제하시겠습니까?')) return;
+  await deleteDoc(doc(db,'lessons',id)); toast('삭제되었습니다'); loadLessons();
+};
+
+window.loadObs = async () => {
+  const c=document.getElementById('obs-list');
+  c.innerHTML='<div style="text-align:center;padding:28px;color:var(--gray4)">불러오는 중...</div>';
+  const lq=query(collection(db,'lessons'),where('ownerUid','==',MY_UID));
+  const lsnap=await getDocs(lq);
+  const lmap={},lids=[];
+  lsnap.forEach(d=>{lmap[d.id]=d.data();lids.push(d.id);});
+  if(!lids.length){c.innerHTML='<div class="empty"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다</p></div>';return;}
+  const oq=query(collection(db,'observations'),where('lessonId','in',lids.slice(0,10)));
+  const osnap=await getDocs(oq);
+  if(osnap.empty){c.innerHTML='<div class="empty"><div class="empty-icon">📝</div><p>아직 제출된 참관록이 없습니다</p></div>';return;}
+  const obs=[];osnap.forEach(d=>obs.push({id:d.id,...d.data()}));
+  c.innerHTML=obs.map(o=>{
+    const l=lmap[o.lessonId]||{};
+    const dt=o.submittedAt?.toDate?.()?.toLocaleDateString('ko-KR')||'';
+    return `<div class="obs-item">
+      <div>
+        <div class="obs-name">${o.name} <span class="type-chip ${o.obsType}">${o.obsType==='teacher'?'교사':'학부모'}</span></div>
+        <div class="obs-meta">${l.grade||''} ${l.cls||''} ${l.subject||''} ${l.unit?'| '+l.unit:''} | ${dt}</div>
+      </div>
+      <button class="btn btn-outline btn-sm no-print" onclick="showObsDetail('${o.id}')">상세보기</button>
+    </div>`;
+  }).join('');
+};
+
+window.showObsDetail = async (id) => {
+  const snap=await getDoc(doc(db,'observations',id));
+  if(!snap.exists()) return;
+  const o=snap.data();
+  const lsnap=await getDoc(doc(db,'lessons',o.lessonId));
+  const l=lsnap.exists()?lsnap.data():{};
+  let html=`<div class="detail-header"><h2>${l.grade||''} ${l.cls||''} ${l.subject||''}</h2><p>${l.date||''} ${l.period||''} | ${l.teacher||''} 선생님${l.room?' | '+l.room:''}</p></div>
+  <div class="detail-section"><div class="detail-section-title">참관자 정보</div>
+  <table class="detail-table"><tr><th>성명</th><td>${o.name}</td></tr><tr><th>소속/관계</th><td>${o.position||'-'}</td></tr><tr><th>구분</th><td>${o.obsType==='teacher'?'교사':'학부모'}</td></tr></table></div>
+  <div class="detail-section"><div class="detail-section-title">참관 내용</div>`;
+  (o.answers||[]).forEach(a=>{
+    html+=`<div style="margin-bottom:12px"><div style="font-size:13px;font-weight:500;color:var(--gray2);margin-bottom:4px">${a.label}</div><div style="font-size:13px;padding:9px 12px;background:var(--gray6);border-radius:var(--r-sm);color:var(--gray1)">${a.value||'(미작성)'}</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('obs-modal-body').innerHTML=html;
+  document.getElementById('obs-modal').classList.remove('hidden');
+};
+
+// 설정
+function renderFieldSettings(type,fields){
+  const c=document.getElementById('fields-'+type);
+  c.innerHTML=fields.map((f,i)=>`
+    <div class="field-item">
+      <input value="${f.label}" data-ft="${type}" data-fi="${i}" placeholder="항목명">
+      <select data-fs="${type}" data-fsi="${i}" style="border:1px solid var(--gray5);border-radius:4px;padding:3px 6px;font-size:11px;font-family:inherit">
+        <option value="textarea" ${f.type==='textarea'?'selected':''}>서술형</option>
+        <option value="rating" ${f.type==='rating'?'selected':''}>평가형</option>
+        <option value="text" ${f.type==='text'?'selected':''}>단답형</option>
+      </select>
+      <button onclick="rmField('${type}',${i})" style="background:none;border:none;color:var(--gray4);cursor:pointer;font-size:15px;flex-shrink:0">✕</button>
+    </div>`).join('');
+}
+window.addField=(type)=>{CONFIG[type+'Fields'].push({label:'새 항목',type:'textarea'});renderFieldSettings(type,CONFIG[type+'Fields']);};
+window.rmField=(type,i)=>{CONFIG[type+'Fields'].splice(i,1);renderFieldSettings(type,CONFIG[type+'Fields']);};
+window.saveFields=async(type)=>{
+  document.querySelectorAll(`[data-ft="${type}"]`).forEach(inp=>{const i=parseInt(inp.dataset.fi);if(CONFIG[type+'Fields'][i])CONFIG[type+'Fields'][i].label=inp.value;});
+  document.querySelectorAll(`[data-fs="${type}"]`).forEach(sel=>{const i=parseInt(sel.dataset.fsi);if(CONFIG[type+'Fields'][i])CONFIG[type+'Fields'][i].type=sel.value;});
+  await setDoc(doc(db,'config',MY_UID),CONFIG); toast('저장되었습니다');
+};
+window.saveAppName=async()=>{
+  CONFIG.appName=document.getElementById('s-name').value.trim()||'수업 참관록';
+  await setDoc(doc(db,'config',MY_UID),CONFIG);
+  document.getElementById('admin-title').textContent=CONFIG.appName; toast('저장되었습니다');
+};
+
+// ══════════════════════════════════════
+// 참관자
+// ══════════════════════════════════════
+async function initObserver() {
+  if(!OWNER_UID){showErr('올바른 접속 주소가 아닙니다.');return;}
+  try{
+    const cfgSnap=await getDoc(doc(db,'config',OWNER_UID));
+    CONFIG=cfgSnap.exists()?cfgSnap.data():{};
+    if(!CONFIG.teacherFields)CONFIG.teacherFields=DEFAULT_T_FIELDS;
+    if(!CONFIG.parentFields)CONFIG.parentFields=DEFAULT_P_FIELDS;
+    const appName=CONFIG.appName||'수업 참관록';
+    document.getElementById('obs-school-name').textContent=appName;
+    document.title=appName+' — 참관록 작성';
+    const badge=document.getElementById('obs-type-badge');
+    if(OBS_TYPE==='parent'){badge.textContent='학부모용';badge.classList.add('parent');document.getElementById('obs-pos-label').innerHTML='관계<span class="req">*</span>';document.getElementById('obs-pos').placeholder='예: 1학년 1반 학부모';}
+    else{badge.textContent='교사용';}
+
+    const q=query(collection(db,'lessons'),where('ownerUid','==',OWNER_UID));
+    const snap=await getDocs(q);
+    snap.forEach(d=>LESSONS.push({id:d.id,...d.data()}));
+    LESSONS.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    if(!LESSONS.length){showErr('등록된 수업이 없습니다. 관리자에게 문의해 주세요.');return;}
+    const sel=document.getElementById('obs-lesson-sel');
+    LESSONS.forEach(l=>{const o=document.createElement('option');o.value=l.id;o.textContent=`${l.date} | ${l.grade} ${l.cls} ${l.subject} — ${l.teacher}`;sel.appendChild(o);});
+    if(LESSONS.length===1){sel.value=LESSONS[0].id;selectLesson();}
+    document.getElementById('screen-observer').classList.remove('hidden');
+  }catch(e){showErr('데이터 로드 실패: '+e.message);}
 }
 
-// ── 평가 버튼 ──
-window.setRating = (groupId, btn, value) => {
-  document.querySelectorAll(`#${groupId} .rating-btn`).forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  ratings[groupId] = value;
-};
+window.selectLesson=()=>{
+  const id=document.getElementById('obs-lesson-sel').value;
+  if(!id){toast('수업을 선택해 주세요',true);return;}
+  SEL_LESSON=LESSONS.find(l=>l.id===id);
+  if(!SEL_LESSON) return;
+  const l=SEL_LESSON;
+  document.getElementById('ol-title').textContent=`${l.grade} ${l.cls} ${l.subject}`;
+  document.getElementById('ol-teacher').textContent=l.teacher;
+  document.getElementById('ol-datetime').textContent=`${l.date} ${l.period}`;
+  document.getElementById('ol-room').textContent=l.room||'-';
+  document.getElementById('ol-unit').textContent=l.unit;
+  document.getElementById('ol-goal').textContent=l.goal;
+  document.getElementById('ol-drive').innerHTML=l.driveUrl?`<a class="drive-btn" href="${l.driveUrl}" target="_blank">📄 지도안 파일 열기</a>`:'';
 
-// ── 참관록 제출 ──
-window.submitObs = async () => {
-  const name = document.getElementById('obs-name').value.trim();
-  const relation = document.getElementById('obs-relation').value;
-  if (!name || !relation) { showToast('성명과 관계를 입력해 주세요', true); return; }
-  if (!ratings.r1||!ratings.r2||!ratings.r3||!ratings.r4) { showToast('모든 항목을 평가해 주세요', true); return; }
-  try {
-    await addDoc(collection(db,'observations'), {
-      lessonId: currentLessonId,
-      name, relation,
-      rating_goal: ratings.r1,
-      rating_participation: ratings.r2,
-      rating_teacher: ratings.r3,
-      rating_env: ratings.r4,
-      good: document.getElementById('obs-good').value,
-      suggest: document.getElementById('obs-suggest').value,
-      total: document.getElementById('obs-total').value,
-      submittedAt: serverTimestamp()
-    });
-    document.getElementById('obs-write-screen').innerHTML = `
-      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center">
-        <div style="text-align:center;padding:40px">
-          <div style="font-size:64px;margin-bottom:16px">✅</div>
-          <h2 style="font-size:22px;font-weight:700;margin-bottom:8px">제출 완료!</h2>
-          <p style="font-size:14px;color:#6B7280">참관록이 성공적으로 제출되었습니다.<br>참여해 주셔서 감사합니다.</p>
-          <button class="btn btn-primary" style="margin-top:24px" onclick="window.print()">🖨️ 인쇄</button>
-        </div>
-      </div>`;
-  } catch(e) { showToast('제출 실패: '+e.message, true); }
-};
-
-window.printObs = () => window.print();
-
-// ── 참관록 목록 로드 ──
-window.loadObservations = async () => {
-  const container = document.getElementById('observations-list');
-  container.innerHTML = '<div style="text-align:center;padding:20px;color:#6B7280">불러오는 중...</div>';
-  try {
-    const uid = currentUser.email.replace(/[.@]/g,'_');
-    // 내 지도안의 ID 목록 먼저
-    const lq = query(collection(db,'lessons'), where('ownerUid','==',uid));
-    const lsnap = await getDocs(lq);
-    const lessonIds = [];
-    const lessonMap = {};
-    lsnap.forEach(d => { lessonIds.push(d.id); lessonMap[d.id]=d.data(); });
-    if (!lessonIds.length) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다</p></div>';
-      return;
+  const fields=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
+  OBS_ANS={};
+  const wrap=document.getElementById('obs-fields-wrap');
+  let html='<div class="obs-form-section">참관 내용</div>';
+  fields.forEach((f,i)=>{
+    if(f.type==='rating'){
+      html+=`<div class="fg"><label>${f.label}</label><div class="rating-row" id="rg${i}">
+        <button class="r-btn" onclick="setR(${i},this,'매우 우수')">매우 우수</button>
+        <button class="r-btn" onclick="setR(${i},this,'우수')">우수</button>
+        <button class="r-btn" onclick="setR(${i},this,'보통')">보통</button>
+        <button class="r-btn" onclick="setR(${i},this,'미흡')">미흡</button>
+      </div></div>`;
+    } else if(f.type==='textarea'){
+      html+=`<div class="fg"><label>${f.label}</label><textarea class="fi" placeholder="${f.label}을 작성해 주세요" oninput="OBS_ANS[${i}]=this.value"></textarea></div>`;
+    } else {
+      html+=`<div class="fg"><label>${f.label}</label><input class="fi" placeholder="${f.label}" oninput="OBS_ANS[${i}]=this.value"></div>`;
     }
-    const oq = query(collection(db,'observations'), where('lessonId','in',lessonIds.slice(0,10)));
-    const osnap = await getDocs(oq);
-    if (osnap.empty) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><p>제출된 참관록이 없습니다</p></div>';
-      return;
-    }
-    const obs = [];
-    osnap.forEach(d => obs.push({id:d.id,...d.data()}));
-    container.innerHTML = obs.map(o => {
-      const l = lessonMap[o.lessonId]||{};
-      const dt = o.submittedAt?.toDate?.()?.toLocaleDateString('ko-KR')||'';
-      return `
-        <div class="obs-list-item">
-          <div>
-            <div style="font-size:15px;font-weight:500">${o.name} <span class="badge badge-blue">${o.relation}</span></div>
-            <div class="obs-list-meta">${l.grade||''} ${l.cls||''} ${l.subject||''} | ${dt}</div>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="showObsDetail('${o.id}')">상세보기</button>
-        </div>`;
-    }).join('');
-  } catch(e) { showToast('불러오기 실패: '+e.message, true); }
+  });
+  wrap.innerHTML=html;
+  document.getElementById('obs-step-select').classList.add('hidden');
+  document.getElementById('obs-step-form').classList.remove('hidden');
 };
 
-// ── 참관록 상세 ──
-window.showObsDetail = async (obsId) => {
-  const snap = await getDoc(doc(db,'observations',obsId));
-  if (!snap.exists()) return;
-  const o = snap.data();
-  const lsnap = await getDoc(doc(db,'lessons',o.lessonId));
-  const l = lsnap.exists() ? lsnap.data() : {};
-  document.getElementById('obs-detail-content').innerHTML = `
-    <table class="obs-table" style="margin-bottom:16px">
-      <tr><th>수업</th><td>${l.grade||''} ${l.cls||''} ${l.subject||''} (${l.date||''})</td></tr>
-      <tr><th>단원</th><td>${l.unit||''}</td></tr>
-      <tr><th>참관자</th><td>${o.name} (${o.relation})</td></tr>
-    </table>
-    <table class="obs-table" style="margin-bottom:16px">
-      <tr><th>수업 목표 달성도</th><td>${o.rating_goal||''}</td></tr>
-      <tr><th>학생 참여도</th><td>${o.rating_participation||''}</td></tr>
-      <tr><th>교사 수업 전문성</th><td>${o.rating_teacher||''}</td></tr>
-      <tr><th>교육 자료 및 환경</th><td>${o.rating_env||''}</td></tr>
-    </table>
-    ${o.good?`<div class="obs-section"><div class="obs-section-title">잘된 점</div><p style="font-size:13px">${o.good}</p></div>`:''}
-    ${o.suggest?`<div class="obs-section"><div class="obs-section-title">제언 사항</div><p style="font-size:13px">${o.suggest}</p></div>`:''}
-    ${o.total?`<div class="obs-section"><div class="obs-section-title">종합 의견</div><p style="font-size:13px">${o.total}</p></div>`:''}
-  `;
-  document.getElementById('obs-detail-modal').classList.remove('hidden');
+window.setR=(i,btn,val)=>{document.querySelectorAll(`#rg${i} .r-btn`).forEach(b=>b.classList.remove('on'));btn.classList.add('on');OBS_ANS[i]=val;};
+
+window.submitObs=async()=>{
+  const name=document.getElementById('obs-name').value.trim();
+  const pos=document.getElementById('obs-pos').value.trim();
+  if(!name||!pos){toast('성명과 소속/관계를 입력해 주세요',true);return;}
+  const fields=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
+  const answers=fields.map((f,i)=>({label:f.label,value:OBS_ANS[i]||''}));
+  try{
+    await addDoc(collection(db,'observations'),{lessonId:SEL_LESSON.id,ownerUid:OWNER_UID,obsType:OBS_TYPE,name,position:pos,answers,submittedAt:serverTimestamp()});
+    document.getElementById('screen-observer').classList.add('hidden');
+    document.getElementById('screen-done').classList.remove('hidden');
+  }catch(e){toast('제출 실패: '+e.message,true);}
 };
 
-window.closeObsDetail = () => document.getElementById('obs-detail-modal').classList.add('hidden');
-window.printObsDetail = () => window.print();
-
-// ── 토스트 ──
-let toastTimer;
-window.showToast = (msg, isErr=false) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = isErr ? '#EF4444' : '#111827';
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-};
-
-// 날짜 기본값
-document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+function showErr(msg){document.getElementById('err-msg').textContent=msg;document.getElementById('screen-error').classList.remove('hidden');}
+let tt;
+window.toast=(msg,err=false)=>{const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3000);};
+window.OBS_ANS=OBS_ANS;
 </script>
 </body>
 </html>
