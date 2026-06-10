@@ -413,7 +413,8 @@ textarea.fi{resize:vertical;min-height:80px;line-height:1.6}
     <div class="done-icon">✅</div>
     <div class="done-title">제출 완료</div>
     <div class="done-sub">참관록이 성공적으로 제출되었습니다.<br>참여해 주셔서 감사합니다.</div>
-    <button class="btn btn-outline" style="margin-top:22px;width:100%;justify-content:center" onclick="window.print()">🖨️ 인쇄</button>
+    <button class="btn btn-p" style="margin-top:22px;width:100%;justify-content:center" onclick="editMyObs()">✏️ 내용 수정하기</button>
+    <button class="btn btn-outline" style="margin-top:10px;width:100%;justify-content:center" onclick="window.print()">🖨️ 인쇄</button>
   </div>
 </div>
 
@@ -576,12 +577,14 @@ window.delLesson=async(id)=>{if(!confirm('삭제하시겠습니까?'))return;awa
 window.loadObs=async()=>{
   const c=document.getElementById('obs-list');
   c.innerHTML='<div style="text-align:center;padding:28px;color:var(--g4);font-weight:500">불러오는 중...</div>';
+  // 지도안 목록
   const lsnap=await getDocs(query(collection(db,'lessons'),where('ownerUid','==',MY_UID)));
-  const lmap={},lids=[];lsnap.forEach(d=>{lmap[d.id]=d.data();lids.push(d.id);});
-  if(!lids.length){c.innerHTML='<div class="empty"><div class="empty-icon">📭</div><p>등록된 지도안이 없습니다</p></div>';return;}
-  const osnap=await getDocs(query(collection(db,'observations'),where('lessonId','in',lids.slice(0,10))));
+  const lmap={};lsnap.forEach(d=>{lmap[d.id]=d.data();});
+  // ownerUid로 직접 조회 (복합 인덱스 불필요)
+  const osnap=await getDocs(query(collection(db,'observations'),where('ownerUid','==',MY_UID)));
   if(osnap.empty){c.innerHTML='<div class="empty"><div class="empty-icon">📝</div><p>아직 제출된 참관록이 없습니다</p></div>';return;}
   const obs=[];osnap.forEach(d=>obs.push({id:d.id,...d.data()}));
+  obs.sort((a,b)=>(b.submittedAt?.seconds||0)-(a.submittedAt?.seconds||0));
   c.innerHTML=obs.map(o=>{
     const l=lmap[o.lessonId]||{};
     const dt=o.submittedAt?.toDate?.()?.toLocaleDateString('ko-KR')||'';
@@ -749,6 +752,8 @@ window.selectLesson=()=>{
 
 window.setR=(i,btn,val)=>{document.querySelectorAll(`#rg${i} .r-btn`).forEach(b=>b.classList.remove('on'));btn.classList.add('on');OBS_ANS[i]=val;};
 
+let SUBMITTED_OBS_ID = null;
+
 window.submitObs=async()=>{
   const name=document.getElementById('obs-name').value.trim();
   const pos=document.getElementById('obs-pos').value.trim();
@@ -756,10 +761,46 @@ window.submitObs=async()=>{
   const fields=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
   const answers=fields.map((f,i)=>({label:f.label,value:OBS_ANS[i]||''}));
   try{
-    await addDoc(collection(db,'observations'),{lessonId:SEL_LESSON.id,ownerUid:OWNER_UID,obsType:OBS_TYPE,name,position:pos,answers,submittedAt:serverTimestamp()});
+    const ref=await addDoc(collection(db,'observations'),{lessonId:SEL_LESSON.id,ownerUid:OWNER_UID,obsType:OBS_TYPE,name,position:pos,answers,submittedAt:serverTimestamp()});
+    SUBMITTED_OBS_ID=ref.id;
     document.getElementById('screen-observer').classList.add('hidden');
     document.getElementById('screen-done').classList.remove('hidden');
   }catch(e){toast('제출 실패: '+e.message,true);}
+};
+
+window.editMyObs=async()=>{
+  if(!SUBMITTED_OBS_ID){toast('수정할 참관록을 찾을 수 없습니다',true);return;}
+  const snap=await getDoc(doc(db,'observations',SUBMITTED_OBS_ID));
+  if(!snap.exists()){toast('참관록을 찾을 수 없습니다',true);return;}
+  const o=snap.data();
+  // 완료 화면 숨기고 폼 다시 표시
+  document.getElementById('screen-done').classList.add('hidden');
+  document.getElementById('screen-observer').classList.remove('hidden');
+  // 기존 값 복원
+  document.getElementById('obs-name').value=o.name||'';
+  document.getElementById('obs-pos').value=o.position||'';
+  (o.answers||[]).forEach((a,i)=>{
+    const ta=document.getElementById(`ta-obs-${i}`)||document.querySelector(`#obs-fields-wrap textarea:nth-of-type(${i+1})`);
+    OBS_ANS[i]=a.value||'';
+  });
+  // 제출 버튼을 수정 저장으로 변경
+  const submitBtn=document.querySelector('#obs-step-form .btn-p[onclick="submitObs()"]');
+  if(submitBtn){
+    submitBtn.textContent='💾 수정 저장';
+    submitBtn.onclick=async()=>{
+      const name2=document.getElementById('obs-name').value.trim();
+      const pos2=document.getElementById('obs-pos').value.trim();
+      if(!name2||!pos2){toast('성명과 소속/관계를 입력해 주세요',true);return;}
+      const fields2=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
+      const answers2=fields2.map((f,i)=>({label:f.label,value:OBS_ANS[i]||''}));
+      try{
+        await updateDoc(doc(db,'observations',SUBMITTED_OBS_ID),{name:name2,position:pos2,answers:answers2,updatedAt:serverTimestamp()});
+        document.getElementById('screen-observer').classList.add('hidden');
+        document.getElementById('screen-done').classList.remove('hidden');
+        toast('수정되었습니다','ok');
+      }catch(e){toast('수정 실패: '+e.message,true);}
+    };
+  }
 };
 
 function showErr(msg){document.getElementById('err-msg').textContent=msg;document.getElementById('screen-error').classList.remove('hidden');}
