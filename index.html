@@ -740,9 +740,9 @@ window.selectLesson=()=>{
         <button class="r-btn" onclick="setR(${i},this,'미흡')">미흡</button>
       </div></div>`;
     } else if(f.type==='textarea'){
-      html+=`<div class="fg"><label>${f.label}</label><textarea class="fi" placeholder="${f.label}을 작성해 주세요" oninput="OBS_ANS[${i}]=this.value"></textarea></div>`;
+      html+=`<div class="fg"><label>${f.label}</label><textarea id="obs-ta-${i}" class="fi" placeholder="${f.label}을 작성해 주세요" oninput="OBS_ANS[${i}]=this.value"></textarea></div>`;
     } else {
-      html+=`<div class="fg"><label>${f.label}</label><input class="fi" placeholder="${f.label}" oninput="OBS_ANS[${i}]=this.value"></div>`;
+      html+=`<div class="fg"><label>${f.label}</label><input id="obs-ti-${i}" class="fi" placeholder="${f.label}" oninput="OBS_ANS[${i}]=this.value"></div>`;
     }
   });
   wrap.innerHTML=html;
@@ -759,7 +759,15 @@ window.submitObs=async()=>{
   const pos=document.getElementById('obs-pos').value.trim();
   if(!name||!pos){toast('성명과 소속/관계를 입력해 주세요',true);return;}
   const fields=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
-  const answers=fields.map((f,i)=>({label:f.label,value:OBS_ANS[i]||''}));
+  // DOM에서 직접 읽기 (oninput 미작동 대비)
+  const answers=fields.map((f,i)=>{
+    let val=OBS_ANS[i]||'';
+    const ta=document.getElementById('obs-ta-'+i);
+    const ti=document.getElementById('obs-ti-'+i);
+    if(ta) val=ta.value;
+    if(ti) val=ti.value;
+    return {label:f.label,value:val};
+  });
   try{
     const ref=await addDoc(collection(db,'observations'),{lessonId:SEL_LESSON.id,ownerUid:OWNER_UID,obsType:OBS_TYPE,name,position:pos,answers,submittedAt:serverTimestamp()});
     SUBMITTED_OBS_ID=ref.id;
