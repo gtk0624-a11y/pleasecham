@@ -778,18 +778,20 @@ window.editMyObs=async()=>{
   const snap=await getDoc(doc(db,'observations',SUBMITTED_OBS_ID));
   if(!snap.exists()){toast('참관록을 찾을 수 없습니다',true);return;}
   const o=snap.data();
-  // 완료 화면 숨기고 폼 다시 표시
   document.getElementById('screen-done').classList.add('hidden');
   document.getElementById('screen-observer').classList.remove('hidden');
   // 기존 값 복원
   document.getElementById('obs-name').value=o.name||'';
   document.getElementById('obs-pos').value=o.position||'';
   (o.answers||[]).forEach((a,i)=>{
-    const ta=document.getElementById(`ta-obs-${i}`)||document.querySelector(`#obs-fields-wrap textarea:nth-of-type(${i+1})`);
+    const ta=document.getElementById('obs-ta-'+i);
+    const ti=document.getElementById('obs-ti-'+i);
+    if(ta) ta.value=a.value||'';
+    if(ti) ti.value=a.value||'';
     OBS_ANS[i]=a.value||'';
   });
   // 제출 버튼을 수정 저장으로 변경
-  const submitBtn=document.querySelector('#obs-step-form .btn-p[onclick="submitObs()"]');
+  const submitBtn=document.querySelector('#obs-step-form .btn-p');
   if(submitBtn){
     submitBtn.textContent='💾 수정 저장';
     submitBtn.onclick=async()=>{
@@ -797,12 +799,18 @@ window.editMyObs=async()=>{
       const pos2=document.getElementById('obs-pos').value.trim();
       if(!name2||!pos2){toast('성명과 소속/관계를 입력해 주세요',true);return;}
       const fields2=OBS_TYPE==='parent'?CONFIG.parentFields:CONFIG.teacherFields;
-      const answers2=fields2.map((f,i)=>({label:f.label,value:OBS_ANS[i]||''}));
+      // DOM에서 직접 읽기
+      const answers2=fields2.map((f,i)=>{
+        const ta=document.getElementById('obs-ta-'+i);
+        const ti=document.getElementById('obs-ti-'+i);
+        const val=(ta?ta.value:(ti?ti.value:''));
+        return {label:f.label,value:val};
+      });
       try{
         await updateDoc(doc(db,'observations',SUBMITTED_OBS_ID),{name:name2,position:pos2,answers:answers2,updatedAt:serverTimestamp()});
         document.getElementById('screen-observer').classList.add('hidden');
         document.getElementById('screen-done').classList.remove('hidden');
-        toast('수정되었습니다','ok');
+        toast('수정 완료!','ok');
       }catch(e){toast('수정 실패: '+e.message,true);}
     };
   }
