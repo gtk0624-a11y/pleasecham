@@ -1,0 +1,70 @@
+rules_version = '2';
+// ─────────────────────────────────────────────
+// 수업 참관록 보안 규칙 (© 김정환 · M.A.D.T)
+// 관리자 ID = 구글 이메일의 . 과 @ 를 _ 로 바꾼 값 (예: gtk0624_gmail_com)
+// ─────────────────────────────────────────────
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null && request.auth.token.email != null; }
+    function myId() { return request.auth.token.email.replace('[.@]', '_'); }
+    function lessonOf(id) { return get(/databases/$(database)/documents/lessons/$(id)).data; }
+    function cfgOf(owner) {
+      return exists(/databases/$(database)/documents/config/$(owner))
+        ? get(/databases/$(database)/documents/config/$(owner)).data : {};
+    }
+
+    // 설정: 누구나 읽기(참관 화면 표시용), 본인만 쓰기
+    match /config/{owner} {
+      allow read: if true;
+      allow write: if signedIn() && myId() == owner;
+    }
+
+    // 수업: 누구나 읽기(수업 목록 표시용), 본인 것만 등록·수정·삭제
+    match /lessons/{id} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.ownerUid == myId();
+      allow update: if signedIn() && resource.data.ownerUid == myId()
+                    && request.resource.data.ownerUid == myId();
+      allow delete: if signedIn() && resource.data.ownerUid == myId();
+    }
+
+    // 참관록 (개인정보: 성명·소속)
+    match /observations/{id} {
+      // 목록 조회는 관리자 본인만 → 다른 사람이 참관록 전체를 긁어 갈 수 없음
+      allow list: if signedIn() && resource.data.ownerUid == myId();
+      // 한 건 조회는 문서 번호(20자리 무작위)를 아는 사람만 → 작성자 본인의 '수정 링크'
+      allow get: if true;
+
+      // 제출: 실제로 존재하고 마감되지 않은 수업에만, 정해진 칸만
+      allow create: if request.resource.data.keys().hasOnly(
+                        ['lessonId','ownerUid','obsType','name','position','answers','submittedAt'])
+                    && request.resource.data.obsType in ['teacher','parent']
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 30
+                    && request.resource.data.position is string
+                    && request.resource.data.position.size() <= 60
+                    && request.resource.data.answers is list
+                    && request.resource.data.answers.size() <= 30
+                    && request.resource.data.submittedAt == request.time
+                    && lessonOf(request.resource.data.lessonId).ownerUid == request.resource.data.ownerUid
+                    && lessonOf(request.resource.data.lessonId).get('closed', false) == false;
+
+      // 수정: 관리자는 언제나 / 작성자는 수정 허용 + 수업 미마감일 때 내용 칸만
+      allow update: if (signedIn() && resource.data.ownerUid == myId())
+                    || (request.resource.data.diff(resource.data).affectedKeys()
+                          .hasOnly(['name','position','answers','updatedAt'])
+                        && request.resource.data.name is string
+                        && request.resource.data.name.size() > 0
+                        && request.resource.data.name.size() <= 30
+                        && request.resource.data.answers is list
+                        && request.resource.data.answers.size() <= 30
+                        && request.resource.data.updatedAt == request.time
+                        && lessonOf(resource.data.lessonId).get('closed', false) == false
+                        && cfgOf(resource.data.ownerUid).get('allowEdit', true) == true);
+
+      allow delete: if signedIn() && resource.data.ownerUid == myId();
+    }
+  }
+}
