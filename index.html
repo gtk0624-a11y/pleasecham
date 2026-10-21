@@ -186,6 +186,27 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 .oitem .acts{display:flex;gap:6px;flex-shrink:0}
 @media(max-width:560px){.oitem{flex-wrap:wrap}.oitem .acts{width:100%;justify-content:flex-end}}
 
+/* lesson groups */
+.ogroup{overflow:hidden;margin-bottom:14px}
+.ogh{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;background:linear-gradient(135deg,var(--dream-ss),#fff 70%);user-select:none}
+.ogh:hover{background:linear-gradient(135deg,var(--dream-s),#fff 70%)}
+.ogh .dt{width:56px;height:56px;border-radius:14px;background:var(--dream);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;line-height:1.1}
+.ogh .dt b{font-size:20px}.ogh .dt small{font-size:11px;font-weight:700;opacity:.85}
+.ogh .tx{flex:1;min-width:0}
+.ogh .tx b{font-family:var(--serif);font-size:18px;display:block;line-height:1.3}
+.ogh .tx span{font-size:12.5px;color:var(--mute);display:block;margin-top:2px}
+.ogh .cnts{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.ogh .gacts{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.ogh .caret{font-size:14px;color:var(--mute);transition:transform .2s;width:20px;text-align:center}
+.ogroup.closed .caret{transform:rotate(-90deg)}
+.ogb{padding:12px;display:flex;flex-direction:column;gap:8px;background:#FAFBFD;border-top:1px solid var(--line2)}
+.ogroup.closed .ogb{display:none}
+.ogb .oitem{box-shadow:none}
+.subh{font-size:12.5px;font-weight:800;color:var(--ink2);padding:4px 6px 0;display:flex;align-items:center;gap:6px}
+@media(max-width:640px){.ogh{flex-wrap:wrap}.ogh .gacts{width:100%;justify-content:flex-end}}
+.appname-edit{border:none;background:none;font-size:14px;opacity:.55;padding:2px 4px;border-radius:6px}
+.appname-edit:hover{opacity:1;background:var(--dream-s)}
+.lsub{font-size:12.5px;color:var(--mute);font-weight:600}
 /* stats panel */
 .spanel{padding:18px 20px;margin-bottom:14px}
 .srow{display:grid;grid-template-columns:150px 1fr 60px;gap:12px;align-items:center;padding:7px 0;font-size:13.5px}
@@ -404,7 +425,8 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
         <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
         Google 계정으로 관리자 로그인
       </button>
-      <p style="margin-top:16px;font-size:12.5px">참관하러 오셨나요? 선생님이 보내 주신 <b>링크나 QR</b>로 들어와 주세요.</p>
+      <p style="margin-top:14px;font-size:12.5px;background:var(--dream-ss);border-radius:10px;padding:9px 12px;color:var(--ink2)">🏫 처음 오신 선생님도 구글 계정으로 로그인하면 <b>나만의 참관록 공간</b>이 바로 만들어져요. 다른 선생님의 수업·참관록은 서로 보이지 않아요.</p>
+      <p style="margin-top:12px;font-size:12.5px">참관하러 오셨나요? 선생님이 보내 주신 <b>링크나 QR</b>로 들어와 주세요.</p>
     </div>
     <div class="footer">© 김정환 · M.A.D.T (Moral And Digital Teacher)</div>
   </div>
@@ -413,7 +435,7 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 <!-- 관리자 -->
 <section id="scr-admin" class="screen" hidden>
   <header class="topbar"><div class="wrap topbar-in">
-    <div class="brand"><img class="mascot" data-mascot alt=""><div style="min-width:0"><b data-appname>수업 참관록</b><small>관리자</small></div></div>
+    <div class="brand"><img class="mascot" data-mascot alt=""><div style="min-width:0"><div style="display:flex;align-items:center;gap:2px;min-width:0"><b data-appname>수업 참관록</b><button class="appname-edit" title="이름 바꾸기" aria-label="사이트 이름 바꾸기" onclick="A.renameApp()">✏️</button></div><small>관리자</small></div></div>
     <span class="who" id="who"></span>
     <button class="btn btn-ghost btn-sm" onclick="A.logout()">로그아웃</button>
   </div></header>
@@ -571,7 +593,8 @@ const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d
 const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch{}};
 const lsDel=k=>{try{localStorage.removeItem(k);}catch{}};
 const typeKo=t=>t==='parent'?'학부모':'교사';
-const lessonTitle=l=>l?`${l.grade||''} ${l.cls||''} ${l.subject||''}`.trim():'(삭제된 수업)';
+const classLabel=l=>l?`${l.grade||''} ${l.cls||''} ${l.subject||''}`.trim():'';
+const lessonTitle=l=>l?((l.title||'').trim()||classLabel(l)):'(삭제된 수업)';
 const base=()=>location.origin+location.pathname;
 const obsUrl=(type,lessonId)=>`${base()}?type=${type}&uid=${encodeURIComponent(S.uid||OWNER)}${lessonId?`&lesson=${lessonId}`:''}`;
 function errMsg(e){
@@ -639,6 +662,7 @@ function obsPrintHTML(o,l,cfgName){
     <table>
       <tr><th>수업일</th><td>${esc(fmtDate(l?.date))} ${esc(l?.period||'')}</td><th>수업 교사</th><td>${esc(l?.teacher||'')}</td></tr>
       <tr><th>학년·반</th><td>${esc(l?.grade||'')} ${esc(l?.cls||'')}</td><th>교과</th><td>${esc(l?.subject||'')}</td></tr>
+      ${l?.title?`<tr><th>수업 제목</th><td colspan="3">${esc(l.title)}</td></tr>`:''}
       <tr><th>단원</th><td colspan="3">${esc(l?.unit||'')}</td></tr>
       <tr><th>수업 목표</th><td colspan="3">${esc(l?.goal||'')}</td></tr>
       ${l?.room?`<tr><th>장소</th><td colspan="3">${esc(l.room)}</td></tr>`:''}
@@ -719,6 +743,7 @@ function renderLessons(){
     return `<article class="card lcard ${l.closed?'is-closed':''}">
       <div class="lcard-top"><span class="datechip">${esc(fmtDate(l.date))} · ${esc(l.period||'')}</span>${l.date===td?'<span class="chip today">오늘</span>':''}${l.closed?'<span class="chip closed">마감</span>':''}${l.driveUrl?'<span class="chip">📎 지도안</span>':''}</div>
       <h3>${esc(lessonTitle(l))}</h3>
+      ${l.title?`<div class="lsub">${esc(classLabel(l))}</div>`:''}
       <div class="unit">${esc(l.unit||'')}</div>
       <div class="meta">${esc(l.teacher||'')} 선생님${l.room?' · '+esc(l.room):''}</div>
       <div class="lcard-stats"><span class="chip t">교사 ${nt}</span><span class="chip p">학부모 ${np}</span></div>
@@ -741,6 +766,7 @@ A.lessonForm=(id,dup=false)=>{
   const editing=id&&!dup;
   openModal({title:editing?'✏️ 수업 수정':dup?'⧉ 수업 복제':'＋ 공개수업 등록',wide:true,body:`
     ${dup?'<div class="notice info">💡 내용을 복사해 왔어요. 반·교시·날짜만 바꿔서 저장하면 새 수업이 돼요.</div>':''}
+    <div class="fg"><label>수업 제목 <span style="font-weight:500;color:var(--mute)">(선택)</span></label><input class="fi" id="l-title" maxlength="60" value="${esc(l.title||'')}" placeholder="예: 질문으로 여는 인권 수업 · 비워 두면 '학년 반 교과'로 표시"></div>
     <div class="row row-2"><div class="fg"><label>수업 교사<span class="req">*</span></label><input class="fi" id="l-teacher" value="${esc(l.teacher||'')}" placeholder="예: 김정환"></div>
     <div class="fg"><label>교과<span class="req">*</span></label><input class="fi" id="l-subject" value="${esc(l.subject||'')}" placeholder="예: 도덕"></div></div>
     <div class="row row-3"><div class="fg"><label>학년<span class="req">*</span></label>${sel('l-grade',gr,l.grade)}</div>
@@ -764,7 +790,7 @@ A.checkDrive=()=>{const v=$('#l-drive')?.value.trim();const h=$('#l-drive-hint')
 A.openDrive=()=>{const u=safeUrl($('#l-drive').value.trim());if(u)window.open(u,'_blank','noopener');else toast('올바른 링크를 넣어 주세요','err');};
 A.saveLesson=async(id)=>{
   const g=k=>$('#l-'+k).value.trim();
-  const d={teacher:g('teacher'),subject:g('subject'),grade:g('grade'),cls:g('cls'),period:g('period'),date:g('date'),room:g('room'),unit:g('unit'),goal:g('goal'),summary:g('summary'),driveUrl:g('drive')};
+  const d={title:g('title'),teacher:g('teacher'),subject:g('subject'),grade:g('grade'),cls:g('cls'),period:g('period'),date:g('date'),room:g('room'),unit:g('unit'),goal:g('goal'),summary:g('summary'),driveUrl:g('drive')};
   const miss=[['teacher','수업 교사'],['subject','교과'],['grade','학년'],['cls','반'],['period','교시'],['date','수업일'],['unit','단원명'],['goal','수업 목표']].filter(([k])=>!d[k]).map(x=>x[1]);
   if(miss.length){toast(`${miss.join(', ')}을(를) 입력해 주세요`,'err');return;}
   if(d.driveUrl&&!safeUrl(d.driveUrl)){toast('지도안 링크 주소를 확인해 주세요','err');return;}
@@ -832,22 +858,59 @@ function filtered(){
   return S.obs.filter(o=>(!lesson||o.lessonId===lesson)&&(type==='all'||(type==='parent'?o.obsType==='parent':o.obsType!=='parent'))&&(!qq||`${o.name} ${o.position}`.toLowerCase().includes(qq)));
 }
 const lmap=()=>Object.fromEntries(S.lessons.map(l=>[l.id,l]));
+function obsItemHTML(o,showLesson,lm){
+  const l=lm[o.lessonId];const t=o.obsType==='parent'?'p':'t';
+  const pv=(o.answers||[]).find(a=>a.value&&!RATINGS.includes(a.value));
+  return `<div class="card oitem">
+    <div class="avatar ${t}">${esc((o.name||'?').slice(0,1))}</div>
+    <div class="body">
+      <div class="nm">${esc(o.name)} <span class="pos">${esc(o.position||'')}</span><span class="chip ${t}">${typeKo(o.obsType)}</span>${o.updatedAt?'<span class="chip edited">수정됨</span>':''}</div>
+      <div class="ls">${showLesson?esc(lessonTitle(l))+' · ':''}제출 ${esc(ts(o.submittedAt))}</div>
+      ${pv?`<div class="pv"><b>${esc(pv.label)}</b> ${esc(pv.value)}</div>`:''}
+    </div>
+    <div class="acts"><button class="btn btn-soft btn-sm" onclick="A.showObs('${o.id}')">보기</button><button class="ibtn" title="수정" aria-label="수정" onclick="A.editObs('${o.id}')">✏️</button><button class="ibtn danger" title="삭제" aria-label="삭제" onclick="A.delObs('${o.id}')">🗑</button></div>
+  </div>`;
+}
+function avgOf(list){let sum=0,n=0;list.forEach(o=>(o.answers||[]).forEach(a=>{const i=RATINGS.indexOf(a.value);if(i>=0){sum+=4-i;n++;}}));return n?(sum/n).toFixed(1):'';}
+const groupOpen={};
 function renderObs(){
   const list=filtered(),lm=lmap(),box=$('#obs-list');
-  renderObsStats(list);
+  renderObsStats(S.filter.lesson?list:[]);
   if(!list.length){box.innerHTML=`<div class="card empty">${mascotTag()}<b>${S.obs.length?'조건에 맞는 참관록이 없어요':'아직 들어온 참관록이 없어요'}</b>${S.obs.length?'필터를 바꿔 보세요.':'수업 카드의 🔗 링크·QR을 참관자에게 공유해 주세요.'}</div>`;applyMascot(box);return;}
-  box.innerHTML=list.map(o=>{const l=lm[o.lessonId];const t=o.obsType==='parent'?'p':'t';
-    const pv=(o.answers||[]).find(a=>a.value&&!RATINGS.includes(a.value));
-    return `<div class="card oitem">
-      <div class="avatar ${t}">${esc((o.name||'?').slice(0,1))}</div>
-      <div class="body">
-        <div class="nm">${esc(o.name)} <span class="pos">${esc(o.position||'')}</span><span class="chip ${t}">${typeKo(o.obsType)}</span>${o.updatedAt?'<span class="chip edited">수정됨</span>':''}</div>
-        <div class="ls">${esc(lessonTitle(l))}${l?' · '+esc(l.unit||''):''} · ${esc(ts(o.submittedAt))}</div>
-        ${pv?`<div class="pv"><b>${esc(pv.label)}</b> ${esc(pv.value)}</div>`:''}
+  const groups=[],idx={};
+  list.forEach(o=>{if(!(o.lessonId in idx)){idx[o.lessonId]=groups.length;groups.push({id:o.lessonId,items:[]});}groups[idx[o.lessonId]].items.push(o);});
+  const order=Object.fromEntries(S.lessons.map((l,i)=>[l.id,i]));
+  groups.sort((a,b)=>(order[a.id]??1e9)-(order[b.id]??1e9));
+  const single=groups.length===1;
+  box.innerHTML=(single?'':`<div class="hint" style="margin:0 0 10px 4px">📚 수업 ${groups.length}개 · 참관록 ${list.length}건 — 수업 이름을 누르면 펼치고 접을 수 있어요.</div>`)+groups.map((g,gi)=>{
+    const l=lm[g.id];const [,m,d]=(l?.date||'--').split('-');
+    const tch=g.items.filter(o=>o.obsType!=='parent'),par=g.items.filter(o=>o.obsType==='parent');
+    const open=single||(groupOpen[g.id]??(groups.length<=3||gi===0));
+    const avg=avgOf(g.items);
+    const part=(arr,label)=>arr.length?`<div class="subh">${label} <span class="chip">${arr.length}</span></div>${arr.map(o=>obsItemHTML(o,false,lm)).join('')}`:'';
+    return `<section class="card ogroup ${open?'':'closed'}" data-g="${g.id}">
+      <div class="ogh" onclick="A.toggleGroup('${g.id}')">
+        <div class="dt"><small>${+m||''}월</small><b>${+d||'?'}</b></div>
+        <div class="tx"><b>${esc(lessonTitle(l))}</b><span>${l?.title?esc(classLabel(l))+' · ':''}${esc(l?.period||'')} · ${esc(l?.teacher||'')} 선생님${l?.unit?' · '+esc(l.unit):''}</span>
+          <div class="cnts"><span class="chip t">교사 ${tch.length}</span><span class="chip p">학부모 ${par.length}</span>${avg?`<span class="chip">평균 ${avg} / 4</span>`:''}${l?.closed?'<span class="chip closed">마감</span>':''}</div></div>
+        <div class="gacts" onclick="event.stopPropagation()">
+          ${single?'':`<button class="btn btn-ghost btn-sm" onclick="A.viewLessonObs('${g.id}')">📊 통계</button>`}
+          <button class="ibtn" title="이 수업 인쇄" aria-label="이 수업 참관록 인쇄" onclick="A.printGroup('${g.id}')">🖨</button>
+          <button class="ibtn" title="이 수업 엑셀" aria-label="이 수업 참관록 엑셀" onclick="A.csvGroup('${g.id}')">⬇</button>
+          <span class="caret">▾</span>
+        </div>
       </div>
-      <div class="acts"><button class="btn btn-soft btn-sm" onclick="A.showObs('${o.id}')">보기</button><button class="ibtn" title="수정" aria-label="수정" onclick="A.editObs('${o.id}')">✏️</button><button class="ibtn danger" title="삭제" aria-label="삭제" onclick="A.delObs('${o.id}')">🗑</button></div>
-    </div>`;}).join('');
+      <div class="ogb">${S.filter.type==='all'?part(tch,'👩‍🏫 교사')+part(par,'👨‍👩‍👧 학부모'):g.items.map(o=>obsItemHTML(o,false,lm)).join('')}</div>
+    </section>`;}).join('');
 }
+A.toggleGroup=id=>{const el=document.querySelector(`.ogroup[data-g="${id}"]`);if(!el)return;el.classList.toggle('closed');groupOpen[id]=!el.classList.contains('closed');};
+A.printGroup=id=>{const list=filtered().filter(o=>o.lessonId===id);if(!list.length)return;const lm=lmap();doPrint(list.map(o=>obsPrintHTML(o,lm[o.lessonId],S.cfg.appName)).join(''));};
+A.csvGroup=id=>{const l=lmap()[id];downloadCSV(filtered().filter(o=>o.lessonId===id),`참관록_${(l?.date||'')}_${lessonTitle(l).replace(/[\\/:*?"<>|\s]+/g,'_')}.csv`);};
+A.renameApp=()=>{
+  openModal({title:'✏️ 사이트 이름 바꾸기',body:`<div class="fg"><label>프로그램 / 행사 이름</label><input class="fi" id="rn-name" maxlength="80" value="${esc(S.cfg.appName)}" placeholder="예: 2026 곡선중학교 수업 나눔 한마당 참관록"></div><div class="hint">로그인 화면, 참관자 화면 맨 위, 인쇄물 제목에 이 이름이 나와요.</div>`,
+    actions:[{label:'취소',on:closeModal},{label:'💾 저장',cls:'btn-primary',on:async()=>{S.cfg.appName=$('#rn-name').value.trim()||'수업 참관록';try{await saveCfg();applyName();$('#s-name').value=S.cfg.appName;closeModal();toast('이름을 바꿨어요','ok');}catch(e){toast(errMsg(e),'err');}}}]});
+  setTimeout(()=>$('#rn-name')?.select(),50);
+};
 function renderObsStats(list){
   const box=$('#obs-stats');
   const by={};
@@ -860,7 +923,7 @@ function renderObsStats(list){
     <div class="slegend">${RATINGS.map((r,i)=>`<span style="--c:${['var(--dream)','#7F9BD8','#F3B89C','var(--peach)'][i]}">${r}</span>`).join('')}</div></div>`;
 }
 function detailHTML(o,l){
-  return `<div class="dhead"><h4>${esc(lessonTitle(l))}</h4><p>${esc(fmtDate(l?.date))} ${esc(l?.period||'')} · ${esc(l?.teacher||'')} 선생님 · ${esc(l?.unit||'')}</p></div>
+  return `<div class="dhead"><h4>${esc(lessonTitle(l))}</h4><p>${l?.title?esc(classLabel(l))+' · ':''}${esc(fmtDate(l?.date))} ${esc(l?.period||'')} · ${esc(l?.teacher||'')} 선생님 · ${esc(l?.unit||'')}</p></div>
     <table class="dtable"><tr><th>참관자</th><td><b>${esc(o.name)}</b> <span class="chip ${o.obsType==='parent'?'p':'t'}">${typeKo(o.obsType)}</span></td></tr>
     <tr><th>${o.obsType==='parent'?'관계':'소속·직위'}</th><td>${esc(o.position||'-')}</td></tr>
     <tr><th>제출</th><td>${esc(ts(o.submittedAt))}${o.updatedAt?` <span class="chip edited">수정 ${esc(ts(o.updatedAt))}</span>`:''}</td></tr></table>
@@ -884,16 +947,17 @@ A.delObs=async id=>{const o=S.obs.find(x=>x.id===id);
   const r=await confirmBox(`<b>${esc(o?.name)}</b> 님의 참관록을 삭제할까요?<br>삭제하면 되돌릴 수 없어요.`,{ok:'삭제',danger:true});if(!r)return;
   try{await deleteDoc(doc(db,'observations',id));toast('삭제했어요','ok');await A.reload();}catch(e){toast(errMsg(e),'err');}};
 A.printFiltered=()=>{const list=filtered();if(!list.length){toast('인쇄할 참관록이 없어요','err');return;}const lm=lmap();doPrint(list.map(o=>obsPrintHTML(o,lm[o.lessonId],S.cfg.appName)).join(''));};
-A.exportCSV=()=>{
-  const list=filtered();if(!list.length){toast('내보낼 참관록이 없어요','err');return;}
+function downloadCSV(list,fname){
+  if(!list.length){toast('내보낼 참관록이 없어요','err');return;}
   const lm=lmap(),labels=[];list.forEach(o=>(o.answers||[]).forEach(a=>{if(!labels.includes(a.label))labels.push(a.label);}));
-  const head=['제출일시','수정일시','수업일','교시','학년','반','교과','수업교사','단원','구분','성명','소속/관계',...labels];
+  const head=['제출일시','수정일시','수업일','교시','수업 제목','학년','반','교과','수업교사','단원','구분','성명','소속/관계',...labels];
   const rows=list.map(o=>{const l=lm[o.lessonId]||{};const m=Object.fromEntries((o.answers||[]).map(a=>[a.label,a.value]));
-    return [ts(o.submittedAt),ts(o.updatedAt),l.date,l.period,l.grade,l.cls,l.subject,l.teacher,l.unit,typeKo(o.obsType),o.name,o.position,...labels.map(k=>m[k]??'')];});
+    return [ts(o.submittedAt),ts(o.updatedAt),l.date,l.period,l.title||'',l.grade,l.cls,l.subject,l.teacher,l.unit,typeKo(o.obsType),o.name,o.position,...labels.map(k=>m[k]??'')];});
   const csv=[head,...rows].map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));a.download=`참관록_${todayStr()}.csv`;document.body.appendChild(a);a.click();a.remove();
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));a.download=fname;document.body.appendChild(a);a.click();a.remove();
   toast(`${list.length}건을 내려받았어요`,'ok');
-};
+}
+A.exportCSV=()=>downloadCSV(filtered(),`참관록_${todayStr()}.csv`);
 
 /* 설정 */
 function fillSettings(){
@@ -983,7 +1047,7 @@ O.list=()=>{
     <div class="ohero">${mascotTag('mascot float')}<div><h1>어떤 수업을<br>참관하셨나요?</h1><div class="bubble">${esc(S.cfg.greeting||DEFAULT_GREET)}</div></div></div>
     <div class="pick">${ls.map(l=>{const [y,m,d]=(l.date||'--').split('-');
       return `<button class="pitem ${l.closed?'is-closed':''}" onclick="O.pick('${l.id}')"><div class="dt"><small>${+m||''}월</small><b>${+d||''}</b></div>
-      <div class="tx"><b>${esc(lessonTitle(l))} ${l.date===td?'<span class="chip today">오늘</span>':''}${l.closed?'<span class="chip closed">마감</span>':''}</b><span>${esc(l.period||'')} · ${esc(l.teacher||'')} 선생님 · ${esc(l.unit||'')}</span></div><span class="go">›</span></button>`;}).join('')}</div>
+      <div class="tx"><b>${esc(lessonTitle(l))} ${l.date===td?'<span class="chip today">오늘</span>':''}${l.closed?'<span class="chip closed">마감</span>':''}</b><span>${l.title?esc(classLabel(l))+' · ':''}${esc(l.period||'')} · ${esc(l.teacher||'')} 선생님 · ${esc(l.unit||'')}</span></div><span class="go">›</span></button>`;}).join('')}</div>
     ${mine.length?`<div class="mine"><h4>📱 이 기기에서 작성한 참관록</h4>${mine.slice(0,10).map(m=>`<div class="mitem"><div class="tx"><b>${esc(m.title)}</b><span>${esc(m.name)} · ${esc(m.at)}</span></div><button class="btn btn-soft btn-sm" onclick="O.goEdit('${m.id}')">보기·수정</button></div>`).join('')}</div>`:''}`;
   applyMascot($('#o-main'));show('scr-obs');
 };
@@ -992,7 +1056,7 @@ O.goEdit=id=>{history.replaceState(null,'',obsUrl(OBS_TYPE)+`&edit=${id}`);O.ope
 function lessonInfoHTML(l){
   const pv=previewUrl(l.driveUrl),href=safeUrl(l.driveUrl);
   return `<div class="card linfo">
-    <div class="linfo-top"><h2>${esc(lessonTitle(l))}</h2><div class="badges"><span class="chip">📅 ${esc(fmtDate(l.date))}</span><span class="chip">🕐 ${esc(l.period||'')}</span>${l.room?`<span class="chip">📍 ${esc(l.room)}</span>`:''}</div></div>
+    <div class="linfo-top"><h2>${esc(lessonTitle(l))}</h2>${l.title?`<div class="lsub" style="margin-top:2px">${esc(classLabel(l))}</div>`:''}<div class="badges"><span class="chip">📅 ${esc(fmtDate(l.date))}</span><span class="chip">🕐 ${esc(l.period||'')}</span>${l.room?`<span class="chip">📍 ${esc(l.room)}</span>`:''}</div></div>
     <div class="goal"><b>수업 목표</b>${esc(l.goal||'')}</div>
     <div class="lmeta"><div><span>교사</span>${esc(l.teacher||'')} 선생님</div><div><span>단원</span>${esc(l.unit||'')}</div>${l.summary?`<div class="full"><span>흐름</span><div style="white-space:pre-wrap">${esc(l.summary)}</div></div>`:''}</div>
     <div class="plan">${href?`<div class="plan-acts">${pv?`<button class="btn btn-soft btn-sm" id="plan-tg" onclick="O.togglePlan()">📄 지도안 미리보기 펼치기</button>`:''}<a class="btn btn-ghost btn-sm" href="${esc(href)}" target="_blank" rel="noopener">↗ 새 탭에서 지도안 열기</a></div>
