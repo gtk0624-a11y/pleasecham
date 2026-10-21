@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#F6F4FB">
+<meta name="theme-color" content="#F5F7FB">
 <title>수업 참관록</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,8 +13,8 @@
 <style>
 :root{
   --ink:#1D2240; --ink2:#4A5072; --mute:#8B90A8; --line:#E7E4F0; --line2:#F0EEF6;
-  --bg:#F6F4FB; --card:#FFFFFF;
-  --dream:#5A55D6; --dream-d:#4440B8; --dream-s:#EEEDFF; --dream-ss:#F6F5FF;
+  --bg:#F5F7FB; --card:#FFFFFF;
+  --dream:#2B4A9B; --dream-d:#1C3474; --dream-s:#E7EDFA; --dream-ss:#F3F6FC;
   --peach:#E9784B; --peach-d:#CF6136; --peach-s:#FDEDE5; --peach-ss:#FFF7F3;
   --mint:#24A07A; --mint-s:#E2F5EE;
   --gold:#D99A00; --gold-s:#FFF4D6;
@@ -32,7 +32,7 @@ body[data-type="parent"]{--acc:var(--peach);--acc-d:var(--peach-d);--acc-s:var(-
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh;word-break:keep-all;overflow-wrap:anywhere}
 body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:radial-gradient(600px 380px at 8% -5%,rgba(90,85,214,.13),transparent 70%),
+  background:radial-gradient(600px 380px at 8% -5%,rgba(43,74,155,.12),transparent 70%),
              radial-gradient(520px 360px at 100% 0%,rgba(233,120,75,.10),transparent 70%),
              radial-gradient(700px 420px at 50% 110%,rgba(36,160,122,.06),transparent 70%)}
 button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
@@ -112,7 +112,7 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 .gbtn:hover{border-color:var(--dream);box-shadow:0 0 0 4px var(--dream-s)}
 
 /* ── admin header ── */
-.topbar{position:sticky;top:0;z-index:30;background:rgba(246,244,251,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(245,247,251,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
 .topbar-in{display:flex;align-items:center;gap:12px;height:62px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .brand img{width:38px;height:38px}
@@ -148,7 +148,7 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 @media(max-width:400px){.lgrid{grid-template-columns:1fr}}
 .lcard{padding:18px 18px 14px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .lcard:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(29,34,64,.1)}
-.lcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--dream),var(--peach))}
+.lcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--dream),#F2C230)}
 .lcard.is-closed{opacity:.72}
 .lcard.is-closed::before{background:#CCC}
 .lcard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -192,7 +192,7 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 .srow .lb{font-weight:700;color:var(--ink2)}
 .sbar{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--line2)}
 .sbar i{display:block;height:100%}
-.sbar i:nth-child(1){background:var(--dream)}.sbar i:nth-child(2){background:#8E8AF0}.sbar i:nth-child(3){background:#F3B89C}.sbar i:nth-child(4){background:var(--peach)}
+.sbar i:nth-child(1){background:var(--dream)}.sbar i:nth-child(2){background:#7F9BD8}.sbar i:nth-child(3){background:#F3B89C}.sbar i:nth-child(4){background:var(--peach)}
 .savg{font-weight:800;text-align:right}
 .slegend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:8px}
 .slegend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px;background:var(--c)}
@@ -307,7 +307,7 @@ textarea.fi{resize:vertical;min-height:96px;line-height:1.65}
 @media(max-width:400px){.rating button{font-size:12.5px;padding:10px 2px}}
 .cnt-line{text-align:right;font-size:12px;color:var(--mute);margin-top:4px}
 
-.sticky-submit{position:sticky;bottom:0;z-index:20;margin:18px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(246,244,251,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.sticky-submit{position:sticky;bottom:0;z-index:20;margin:18px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(245,247,251,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
 .sticky-in{max-width:728px;margin:0 auto;display:flex;align-items:center;gap:14px}
 .prog{flex:1}
 .prog .t{font-size:12.5px;font-weight:700;color:var(--ink2);margin-bottom:5px}
@@ -551,7 +551,7 @@ const DEFAULT_P=[
   {label:'수업에서 좋았던 점',type:'textarea'},{label:'건의 사항',type:'textarea'},{label:'종합 소감',type:'textarea'}
 ];
 const DEFAULT_GREET='참관해 주셔서 고마워요! 보고 느낀 점을 편하게 남겨 주세요.';
-const FALLBACK_MASCOT='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9C6FF"/><stop offset="1" stop-color="#FFD3C0"/></linearGradient></defs><path d="M30 86c-12 0-20-8-20-19 0-10 8-18 18-19 2-15 14-26 30-26 13 0 24 8 28 20 13 0 24 10 24 23 0 12-10 21-23 21z" fill="url(#g)"/><path d="M60 46l3.5 8 8.5 1-6.5 6 2 8.5L60 65l-7.5 4.5 2-8.5-6.5-6 8.5-1z" fill="#fff"/></svg>`);
+const FALLBACK_MASCOT='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9D6F2"/><stop offset="1" stop-color="#FFD3C0"/></linearGradient></defs><path d="M30 86c-12 0-20-8-20-19 0-10 8-18 18-19 2-15 14-26 30-26 13 0 24 8 28 20 13 0 24 10 24 23 0 12-10 21-23 21z" fill="url(#g)"/><path d="M60 46l3.5 8 8.5 1-6.5 6 2 8.5L60 65l-7.5 4.5 2-8.5-6.5-6 8.5-1z" fill="#fff"/></svg>`);
 
 /* ───────── 상태 ───────── */
 const S={uid:'',me:null,cfg:{},lessons:[],obs:[],filter:{lesson:'',type:'all',q:''},fields:{teacher:[],parent:[]},
@@ -857,7 +857,7 @@ function renderObsStats(list){
   box.innerHTML=`<div class="card spanel"><div class="bar" style="margin-bottom:6px"><div class="grow"><div class="sec-title" style="font-size:17px">한눈에 보는 평가</div><div class="sec-sub">지금 보이는 참관록 ${list.length}건 기준 · 평균은 매우 우수 4점 ~ 미흡 1점</div></div></div>
     ${labels.map(lb=>{const c=by[lb],n=c.reduce((a,b)=>a+b,0),avg=(c[0]*4+c[1]*3+c[2]*2+c[3])/n;
       return `<div class="srow"><div class="lb">${esc(lb)}</div><div class="sbar" title="${RATINGS.map((r,i)=>`${r} ${c[i]}`).join(' · ')}">${c.map(v=>`<i style="width:${v/n*100}%"></i>`).join('')}</div><div class="savg">${avg.toFixed(1)}</div></div>`;}).join('')}
-    <div class="slegend">${RATINGS.map((r,i)=>`<span style="--c:${['var(--dream)','#8E8AF0','#F3B89C','var(--peach)'][i]}">${r}</span>`).join('')}</div></div>`;
+    <div class="slegend">${RATINGS.map((r,i)=>`<span style="--c:${['var(--dream)','#7F9BD8','#F3B89C','var(--peach)'][i]}">${r}</span>`).join('')}</div></div>`;
 }
 function detailHTML(o,l){
   return `<div class="dhead"><h4>${esc(lessonTitle(l))}</h4><p>${esc(fmtDate(l?.date))} ${esc(l?.period||'')} · ${esc(l?.teacher||'')} 선생님 · ${esc(l?.unit||'')}</p></div>
@@ -1106,7 +1106,7 @@ O.openEdit=async id=>{
 
 function confetti(){
   const c=document.createElement('div');c.className='confetti';
-  const cols=['#5A55D6','#8E8AF0','#E9784B','#F3B89C','#24A07A','#FFD166'];
+  const cols=['#2B4A9B','#7F9BD8','#E9784B','#F3B89C','#24A07A','#FFD166'];
   for(let i=0;i<70;i++){const p=document.createElement('i');p.style.left=Math.random()*100+'vw';p.style.background=cols[i%cols.length];p.style.animationDuration=(2.2+Math.random()*2)+'s';p.style.animationDelay=Math.random()*.6+'s';p.style.transform=`rotate(${Math.random()*360}deg)`;c.appendChild(p);}
   document.body.appendChild(c);setTimeout(()=>c.remove(),5000);
 }
