@@ -66,5 +66,14 @@ service cloud.firestore {
 
       allow delete: if signedIn() && resource.data.ownerUid == myId();
     }
+
+    // ※ 예전 버전(newcham 저장소)이 쓰는 경로 — 그 앱이 멈추지 않도록 기존과 동일하게 유지
+    //   newcham을 더 이상 쓰지 않게 되면 아래 두 블록을 지우면 됨
+    match /schools/{rest=**} {
+      allow read, write: if true;
+    }
+    match /userRoles/{rest=**} {
+      allow read, write: if true;
+    }
   }
 }
